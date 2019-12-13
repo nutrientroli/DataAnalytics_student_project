@@ -24,6 +24,7 @@ the following questions:
 library("knitr")
 library("dplyr")
 library("lubridate")
+library("ggplot2")
 
 ```
 
