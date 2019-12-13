@@ -1,0 +1,354 @@
+---
+title: "Data Analytics"
+author: "Project template"
+date: "Designed by: Ester Bernadó"
+output: 
+  html_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+---
+
+****
+# General overview of the data tracking
+****
+
+To have a general idea of what has been tracked and for how long, check the datasets provided and answer to
+the following questions:
+
+## How long is the tracking period?
+
+```{r, eval=TRUE, echo=TRUE}
+
+# Librerias en uso
+library("knitr")
+library("dplyr")
+library("lubridate")
+
+```
+
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
+
+
+  daysOfTracking = length(  unique(trackingData$Date))
+  daysOfTracking
+
+```
+
+## How many different users have installed the game?
+
+```{r, eval=TRUE, echo=TRUE}
+
+  usersData = read.csv("users.csv",sep = ",", na.strings ="NA")
+  
+  usersInstalledTheGame = unique( trackingData$UserID[trackingData$Action == "Install"])
+  usersInstalledGameAmount = length(usersInstalledTheGame)
+  usersInstalledGameAmount
+```
+
+## How many different users have played the game during the tracking period?
+
+```{r, eval=TRUE, echo=TRUE}
+
+  usersPlayedGame = unique( trackingData$UserID[trackingData$Action == "Session"] )
+
+  usersPlayedGameAmount = length(usersPlayedGame)
+usersPlayedGameAmount
+```
+
+## How many users have uninstalled the game?
+
+```{r, eval=TRUE, echo=TRUE}
+
+     usersUninstalledGame = unique( trackingData$UserID[trackingData$Action == "Uninstall"] )
+
+  usersUninstalledGameAmount = length(usersUninstalledGame)
+usersUninstalledGameAmount
+
+```
+
+## What is the average of the number of sessions played by the users during the tracking period?
+
+```{r, eval=TRUE, echo=TRUE}
+
+  sessionSelection = trackingData[trackingData$Action == "Session",]
+
+sessionAverage = mean(sessionSelection$SessionLenght)
+sessionAverage
+
+#                                                         pipe de UNIX Buscar
+data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAmount,sessionAverage) %>% t() %>% kable() 
+
+# t() cambia columnas por hileras
+# las pipes sirven para pasar datos de una funcion u objeto a otro 
+
+```
+
+# Demographics of users
+
+## What is the distribution of users that are playing the game, in terms of sex and age?
+
+```{r, eval=TRUE, echo=TRUE}
+  
+  # cuidao que esto no esta dani
+
+  pie (table(usersData$sex), main = "Sex distribtion of players", labels = c("Females", "Males"), col = rainbow(length(table(usersData$sex))))
+  barplot(table(usersData$age))
+  
+  print("Es apreciable una clara diferencia entre el numero de jugadores y jugadoras dentro de la muestra obtenida. Esto nos indica claramente que el publico principal del juego son hombres")
+  
+  
+
+```
+
+## What is the distribution of age of female players and male players?
+
+
+```{r, eval=TRUE, echo=TRUE}
+  
+# FEMALES ------------------------------------------------------ //
+femaleSegment = usersData[usersData$sex == "F",]
+# MALES  ------------------------------------------------------ //
+maleSegment = usersData[usersData$sex == "M",]
+
+boxplot( femaleSegment$age, maleSegment$age, 
+          main = "Female and Male age comparaison",
+          names = c("Female Players", "Male Players"),
+          col = c("Green","Blue"),
+         ylab = "Age",
+         xlab = "Population Sample")
+
+print ("El grafico nos muestra que existe una diferencia sustancial entre la edad en la cual las mujeres juegan y la edad en la que los hombres juegan. Encontramos una diferencia de edad de diez años entre las medias de ambos grupos. Lo que tambien es curioso es que los hombres de mas edad no juegan tanto como las mujeres de esa misma edad lo cual puede darse por varios motivos siendo uno de estos la menor esperanza de vida o la posibilidad de que no existan productos de entretenimiento adecuados para hombres de dicha edad")
+
+# Conclusión ----------------------------------------------------- //
+print("Conclusión")
+print("Encontramos que en este juego la mayoria de usuarios que lo juegan son hombres que en su mayoria se encuentran entre 30 y 40 años. Estos forman aproximadamente un 60% de la poblacion del juego. Encontramos ademas que el juego atrae la atencion de mujeres de entre 53 y 57 años. Estas ocupan un 40% aproximadamente de la muestra obtenida. En caso de necesidad seria primario centrarse en satisfacer al publico masculino antes que al femenino (en caso de necesidad claro esta).")
+# ----------------------------------------------------------------- //
+
+```
+
+# Metrics of Player Population
+
+## Installs per day
+
+### How many installations are there per day? 
+
+#### Draw a plot that shows the total number of installations per day. Also draw a line that shows the average of installations. Include a legend describing the two curves. 
+
+
+```{r, eval=TRUE, echo=TRUE}
+
+library(dplyr)
+# daysOfMesure = unique(trackingData$Date)
+
+# Guardamos un data set solo con las instalaciones
+temporalTrackingData = trackingData[trackingData$Action == "Install",]
+
+installationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Installs = length(Action))
+installationsPerDay
+
+installsAverage = mean(installationsPerDay$Installs)
+installsAverage
+
+plot(installationsPerDay$Installs ,
+     main = "Installations per day Plot",
+     ylab = "Instalations Per Day" ,
+     xlab = "Day of mesure",
+     type = "l",
+     col = "blue"
+     ) 
+legend(10,100,legend = c("A","B"),bg = "grey",
+       col=c("red", "blue"), lty=1:2, cex=0.8,
+       title = "Type of lines")  # legend no esta funcionando
+abline(h = installsAverage, col = "green")
+
+
+
+
+```
+
+#### Draw a second plot where you show the same plot as before, together with the number of uninstallations per day.
+
+```{r, eval=TRUE, echo=TRUE}
+# DANI DEBES MOSTRARLAS EN UN SOLO PLOT
+```
+
+
+```{r, eval=TRUE, echo=TRUE}
+library(dplyr)
+
+# UNINSTALLS PER DAY
+temporalTrackingData = trackingData[trackingData$Action == "Uninstall",]
+
+unInstallationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Uninstalls = length(Action))
+unInstallationsPerDay
+
+uninstallsAverage = mean(unInstallationsPerDay$Uninstalls)
+uninstallsAverage
+
+plot(unInstallationsPerDay$Uninstalls ,
+     main = "Unnstallations per day Plot",
+     ylab = "uNnstalations Per Day" ,
+     xlab = "Day of mesure",
+     type = "l",
+     col = "red"
+     ) 
+legend(10,100,legend = c("A","B"),bg = "grey",
+       col=c("red", "blue"), lty=1:2, cex=0.8,
+       title = "Type of lines")  # legend no esta funcionando
+abline(h = uninstallsAverage, col = "orange")
+
+
+```
+
+
+
+
+
+## DAU
+
+### Compute DAU (Daily Active Users) along the days of the tracking period and show a plot (x axis of the play represents the dates and y axis the value of DAU every day).
+
+```{r, eval=TRUE, echo=TRUE}
+
+## Compute DAU (Daily Active Users) along the days of the tracking period
+
+dte = as.Date(trackingData$Date)
+trackingData$Date = NULL;
+trackingData$Date = dte;
+
+trackingDataOnlySesions = trackingData[ trackingData$Action =="Session" ,]
+trackingDataOnlySesions  ## hay repeticiones de usuarios
+
+sesionsPerDay = as.numeric( table( trackingDataOnlySesions$Date)  )
+plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",)
+
+
+```
+
+### After you plot DAU, draw the same plot, but now with two curves: one with DAU per day and the other one with installations per day. Thus, we can evaluate how DAU is related with the number of installations.
+
+```{r, eval=TRUE, echo=TRUE}
+
+plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",col = "green", main = "Sesions and installs")
+lines(installationsPerDay, col= "dark blue" )
+legend (x = 80, y = 300,
+        legend = c ("Sesions Per Day" , "Installs per Day"), 
+        col = c("green", "dark blue"),
+        text.col = c("green","dark blue"))
+
+
+#####
+# Ejemplo
+x <- seq(-pi, pi, len = 65)
+plot(x, sin(x), type = "l", ylim = c(-1.2, 1.8), col = 3, lty = 2)
+points(x, cos(x), pch = 3, col = 4)
+lines(x, tan(x), type = "b", lty = 1, pch = 4, col = 6)
+title("legend(..., lty = c(2, -1, 1), pch = c(NA, 3, 4), merge = TRUE)",
+      cex.main = 1.1)
+legend(-1, 1.9, c("sin", "cos", "tan"), col = c(3, 4, 6),
+       text.col = "green4", lty = c(2, -1, 1), pch = c(NA, 3, 4),
+       merge = TRUE, bg = "gray90")
+#####
+
+```
+
+## MAUU
+
+### How much is MAUU?
+#### Compute MAUU for each of the months of the tracking period and show it graphically.
+
+```{r, eval=TRUE, echo=TRUE}
+ 
+# Dates Info
+# https://www.stat.berkeley.edu/~s133/dates.html
+
+# Separemos cada mes y guardemos en este sus usuarios no repetidos
+
+monthsOfAnalisis = unique( month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
+monthsOfAnalisis
+monthsOfAnalisisName = unique(months(trackingData$Date))
+monthsOfAnalisisName
+
+GetUniqueUsersOfMonth = function( monthNumericIdentificator, dataStructure) {
+  
+  if (monthNumericIdentificator < 1 || monthNumericIdentificator > 12) {
+    print("Unable to operate with month")
+    return(NULL)
+  }
+  
+  # Comparamos el mes de cada entrada dentro de la estructura de datos y lo comparamos con el mes que le hemos pedido que anlize
+  monthDataFrame = dataStructure[ month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")) == monthNumericIdentificator, ]
+
+  print("SUCCESS!")
+  
+  return (monthDataFrame)
+  
+}
+
+maus = rep(1,length(monthsOfAnalisis))
+iterationIndex = 0
+# Iteramos por cada uno de los meses del analisis
+for (mth in monthsOfAnalisis) {
+  
+  iterationIndex = iterationIndex + 1
+  
+  monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
+  monthDataFrameOnlySesions = monthDataFrame[ monthDataFrame$Action =="Session" ,]
+  
+  # cojemos de el data frame del mes la cantidad de entradas
+  activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
+  maus[iterationIndex] = activeUsersOfMonth
+
+}
+
+# Generamos el plot
+plot (maus, type = "l",xlab = "Month", ylab = "MAUU",xaxt="n", col = "dark red")
+axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
+
+```
+
+## DAU/MAUU ratio
+### How much is the DAU/MAUU ratio?
+#### Compute DAU/MAUU per day of the month.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+#### Compute also the average DAU with respect to MAUU which will result in a single ratio per month
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+##Data Analysis
+This is subsection Data Analysis...
+
+```{r, eval=TRUE, echo=TRUE}
+  #More R code...
+  c<-"again hello world"
+  cat(c)
+```
+
+##Interpretation
+
+The document follows...
+
+#New Section
+
+#Another Section
+
+#Yet Another Section
+
+#More Sections
+
