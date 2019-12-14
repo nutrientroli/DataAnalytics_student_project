@@ -479,6 +479,7 @@ ARPU = TotalRevenue/Users
 ARPPU = TotalRevenue/PayUsers
 
 #Explicar y mostrar resultados
+
 ```
 
 
@@ -486,6 +487,19 @@ ARPPU = TotalRevenue/PayUsers
 #### Compute LTV of every user and the average LTV of the users of the game. Since active users can be still contributing to the game, consider only those users that churned. Draw the distribution of TLV per user and also compute the average LTV.
 
 ```{r, eval=TRUE, echo=TRUE}
+
+#Borrar al acabar------------------/
+  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
+  
+  usersData = read.csv("users.csv",sep = ",", na.strings ="NA") 
+#----------------------------------/
+  
+#solo los k han abandonado
+  # life time
+  # revenue 
+
 
 
 ```
