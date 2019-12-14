@@ -331,25 +331,105 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 
 ```
 
+# 4 Gameplay Metrics
+#### Now, the analysis looks at the gameplay metrics: number of sessions per user, play time of sessions, etc. 
+#### Answer the following questions.
 
-##Data Analysis
-This is subsection Data Analysis...
+## 4.1 Number of sessions per player
+#### Compute the average number of sessions of the users. Show a histogram and/or boxplot and explain the result.
 
 ```{r, eval=TRUE, echo=TRUE}
-  #More R code...
-  c<-"again hello world"
-  cat(c)
+  
+
+
 ```
 
-##Interpretation
 
-The document follows...
+## 4.2 Play time
+### How much is the average time spent by the users in the playing sessions?
+#### The dataset shows the time of each session of every day and every user. One way of looking at the time spent by user is to compute the average gamming time of every user (along the different sessions that each user plays) and the standart deviation. Compute this average and standart deviation. Then, plot the distribution of gaming time of the users as histogram. Interpret the results.
 
-#New Section
+```{r, eval=TRUE, echo=TRUE}
+  
 
-#Another Section
 
-#Yet Another Section
+```
 
-#More Sections
 
+## 4.3 Elapsed time between sessions
+#### Compute the average time between sessions of each user and draw a boxplot or histogram. Interpret the results.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+## 4.4 Retention
+#### Compute the retention at day 7, day 14, and day 30. Draw a plot that shows these retentions along the days.
+#### **Tip** Since you will need to compute retention several times, the best way is to define a function that does this and that receives the necessary parameters. This is the header of the function:
+#### Retention <- function (DS, dR)
+#### where DS is the dataset, and dR is the retention that you will compute (D7, D14, D30). The function returns a vector with the specific retention computed along the days of tracking period.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+# 5 Game Industry Metrics
+#### Now, the designers aim at investigating the common game industry metrics, i.e., the metrics that are related to monetization. Follow the guidelines provided. As always, you need to provide nice plots and tables, as required also explanations of the results obtained.
+
+## 5.1 Life Time
+#### Compute the average life time of the users. Asume that the users that didn't uninstall the game are still active. Thus, compte LTV of those that are not active any more.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+## 5.2 Daily Revenue
+#### Compute and plot the revenue per day and per month. Also compute the total revenue of the tracking period.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+## 5.3 Conversion Rate
+#### Compute the conversion rate of the users of the game. Explain the results.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+## 5.4 ARPU and ARPPU
+#### Compute ARPU and ARPPU. Explain the results.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+## 5.5 LTV per user 
+#### Compute LTV of every user and the average LTV of the users of the game. Since active users can be still contributing to the game, consider only those users that churned. Draw the distribution of TLV per user and also compute the average LTV.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+
+
+```
+
+
+# 6 A/B Test
