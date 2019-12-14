@@ -386,8 +386,22 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 #### Compute the average life time of the users. Asume that the users that didn't uninstall the game are still active. Thus, compte LTV of those that are not active any more.
 
 ```{r, eval=TRUE, echo=TRUE}
+#Borrar al acabar------------------/
+  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
   
+#----------------------------------/
 
+temp = trackingData[which(trackingData$Action == "Install"),]
+usersDateInstalledTheGame = data.frame(UserID=temp$UserID, DateInstall=temp$Date)
+
+temp = trackingData[which(trackingData$Action == "Uninstall"),]
+usersDateUninstalledTheGame = data.frame(UserID=temp$UserID, DateUnistall=temp$Date)
+
+usersDatesLifeTime<-merge(usersDateInstalledTheGame,usersDateUninstalledTheGame, all.y=TRUE)
+
+# Ya tenemos el dataset preparado. Solo hay que calcularlo. Comparacion de fechas?
 
 ```
 
@@ -396,8 +410,21 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 #### Compute and plot the revenue per day and per month. Also compute the total revenue of the tracking period.
 
 ```{r, eval=TRUE, echo=TRUE}
+#Borrar al acabar------------------/
+  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
   
+#----------------------------------/
+  
+temp = trackingData[which(trackingData$Action == "Session"),]
+usersDateSessionsMoneySpent = data.frame(UserID=temp$UserID, Date=temp$Date, Money=temp$MoneySpent, DateMonth=month(as.POSIXlt(temp$Date, format="%Y-%m-%d")))
 
+sum(usersDateSessionsMoneySpent$Money)
+summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
+summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
+
+# Ya tenemos los calculos hechos, hace falta plots y explicar.
 
 ```
 
@@ -426,7 +453,6 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 #### Compute LTV of every user and the average LTV of the users of the game. Since active users can be still contributing to the game, consider only those users that churned. Draw the distribution of TLV per user and also compute the average LTV.
 
 ```{r, eval=TRUE, echo=TRUE}
-  
 
 
 ```
