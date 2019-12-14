@@ -458,9 +458,27 @@ CR = nrow(usersMoneySpent)/nrow(usersData)
 #### Compute ARPU and ARPPU. Explain the results.
 
 ```{r, eval=TRUE, echo=TRUE}
+#Borrar al acabar------------------/
+  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
   
+  usersData = read.csv("users.csv",sep = ",", na.strings ="NA") 
+#----------------------------------/
+  
+temp = trackingData[which(trackingData$Action == "Session"),]
+usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
+usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID),Revenue=sum(Money)))
 
+TotalRevenue = sum(usersMoneySpent$Revenue) 
+Users = nrow(data.frame(summarise(group_by(usersData,UserID))))
+PayUsers = nrow(usersMoneySpent)
 
+ARPU = TotalRevenue/Users
+ARPPU = TotalRevenue/PayUsers
+
+#Explicar y mostrar resultados
 ```
 
 
