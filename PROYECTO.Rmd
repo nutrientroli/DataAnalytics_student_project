@@ -226,6 +226,11 @@ trackingDataOnlySesions = trackingData[ trackingData$Action =="Session" ,]
 trackingDataOnlySesions  ## hay repeticiones de usuarios
 
 sesionsPerDay = as.numeric( table( trackingDataOnlySesions$Date)  )
+
+sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
+sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
+sesionsPerDayWithMonth
+
 plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",)
 
 
@@ -272,8 +277,10 @@ legend(-1, 1.9, c("sin", "cos", "tan"), col = c(3, 4, 6),
 
 monthsOfAnalisis = unique( month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
 monthsOfAnalisis
+trackingData$Month = month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y"))
 monthsOfAnalisisName = unique(months(trackingData$Date))
 monthsOfAnalisisName
+
 
 GetUniqueUsersOfMonth = function( monthNumericIdentificator, dataStructure) {
   
@@ -319,7 +326,43 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 
 ```{r, eval=TRUE, echo=TRUE}
   
+  # Primero debemos saber el DAU --> Ya lo sabemos
+  # Y despues conocer el MAUU del mes --> Ya lo tenemos
 
+  maus                # el mauu de cada mes
+  sesionsPerDayWithMonth       # BASICAMENTE EL DAU DE CADA DIA junto con el mes del cual sale
+  monthsOfAnalisis
+  
+  # separate the sesions per each month
+  sesionsOfFirstMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[1],]
+    sesionsSecondMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[2],]
+    sesionsThirdMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
+    sesionsForthMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
+  
+  sesionsOfFirstMonth
+  maus[1]
+  sesionsSecondMonth
+  maus[2]             # hay un aumento muy imporntate en el mau de un mes para el otro
+  sesionsThirdMonth
+  maus[3]
+  sesionsForthMonth
+  maus[4]
+  
+  # Get for each day the relatio between the sesions / MAUU of the month of the day
+  # first month sesions
+  
+  dauMauuFirstMonth = sesionsOfFirstMonth$sesionsPerDay / maus[1]
+  dauMauuSecondMonth = sesionsSecondMonth$sesionsPerDay / maus[2]
+  dauMauuThirdMonth = sesionsThirdMonth$sesionsPerDay / maus[3]
+  dauMauuForthMonth = sesionsForthMonth$sesionsPerDay / maus[4]
+  
+  dauMauuFirstMonth
+  
+  dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth,dauMauuForthMonth)
+  
+  dauMauuAglomerated
+  
+  plot(dauMauuAglomerated)
 
 ```
 
@@ -327,8 +370,28 @@ axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
 
 ```{r, eval=TRUE, echo=TRUE}
   
-
-
+  # no estoy seguro de si es esto lo que pide
+  averageDauMaus = rep(-1,length(monthsOfAnalisis))
+  averageDauMaus[1] = mean(dauMauuAglomerated[1])
+  averageDauMaus[2] = mean(dauMauuAglomerated[2])
+  averageDauMaus[3] = mean(dauMauuAglomerated[3])
+  averageDauMaus[4] = mean(dauMauuAglomerated[4])
+  
+  averageDauMaus
+  plot(averageDauMaus)
+  
+  # o esto (media de los dau de un mes partido el mauu de este)
+  averageDaus = rep(-1,length(monthsOfAnalisis))
+  averageDaus[1] = mean(  sesionsOfFirstMonth$sesionsPerDay)
+  averageDaus[2] = mean(  sesionsSecondMonth$sesionsPerDay)
+  averageDaus[3] = mean(  sesionsThirdMonth$sesionsPerDay)
+  averageDaus[4] = mean(  sesionsForthMonth$sesionsPerDay)
+  
+  averageDauMauPerMonth = averageDaus / maus
+  averageDauMauPerMonth
+  
+  plot (averageDauMauPerMonth)
+  
 ```
 
 # 4 Gameplay Metrics
