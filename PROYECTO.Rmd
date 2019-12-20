@@ -36,7 +36,9 @@ library("ggplot2")
 
 
   daysOfTracking = length(  unique(trackingData$Date))
-  daysOfTracking
+daysOfTracking
+
+paste ("El total de dias de tracking es de unos ", (daysOfTracking) , " lo cual equivale a 4 meses de analisis")
 
 ```
 
@@ -49,6 +51,8 @@ library("ggplot2")
   usersInstalledTheGame = unique( trackingData$UserID[trackingData$Action == "Install"])
   usersInstalledGameAmount = length(usersInstalledTheGame)
   usersInstalledGameAmount
+  
+  paste(" Las instalaciones son notorias sumando un total de " , usersInstalledGameAmount)
 ```
 
 ## How many different users have played the game during the tracking period?
@@ -59,6 +63,9 @@ library("ggplot2")
 
   usersPlayedGameAmount = length(usersPlayedGame)
 usersPlayedGameAmount
+
+paste ("De los usuarios que han jugado encontramos que " , usersPlayedGameAmount , " han jugado al juego")
+
 ```
 
 ## How many users have uninstalled the game?
@@ -69,6 +76,8 @@ usersPlayedGameAmount
 
   usersUninstalledGameAmount = length(usersUninstalledGame)
 usersUninstalledGameAmount
+
+paste ("Los usuarios que han desintalado el juego, sin importar si lo juegan o no es de " , usersUninstalledGameAmount)
 
 ```
 
@@ -87,6 +96,8 @@ data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAm
 # t() cambia columnas por hileras
 # las pipes sirven para pasar datos de una funcion u objeto a otro 
 
+paste ("Por lo general encontramos que una cuarta parte de nuestras instalaciones han desintalado el juego en el periodo de los cuatro meses. Ademas casi la totalidad de los usuarios que han instalado el juego han jugado a este siendo una muy pequeña parte la cual ha desinstalado el juego antes de jugarlo.")
+
 ```
 
 # Demographics of users
@@ -94,11 +105,17 @@ data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAm
 ## What is the distribution of users that are playing the game, in terms of sex and age?
 
 ```{r, eval=TRUE, echo=TRUE}
-  
-  # cuidao que esto no esta dani
 
-  pie (table(usersData$sex), main = "Sex distribtion of players", labels = c("Females", "Males"), col = rainbow(length(table(usersData$sex))))
-  barplot(table(usersData$age))
+  pie (table(usersData$sex), main = "Sex distribtion of players", 
+                            labels = c("Females", "Males"), 
+                            col = rainbow(length(table(usersData$sex)))
+                            )
+  
+  barplot(table(usersData$age), 
+          main = "Age distribution of users", 
+          col = rainbow(length(table(usersData$age))),
+          ylab = "User amount",
+          xlab = "Age of user")
   
   print("Es apreciable una clara diferencia entre el numero de jugadores y jugadoras dentro de la muestra obtenida. Esto nos indica claramente que el publico principal del juego son hombres")
   
@@ -162,10 +179,14 @@ plot(installationsPerDay$Installs ,
      type = "l",
      col = "blue"
      ) 
-legend(10,100,legend = c("A","B"),bg = "grey",
-       col=c("red", "blue"), lty=1:2, cex=0.8,
-       title = "Type of lines")  # legend no esta funcionando
 abline(h = installsAverage, col = "green")
+legend(x = 30, y = 70,
+       legend = c("Installations","Average of installtions"),
+       bg = "grey",
+       col=c("blue", "green"), 
+       lty=1:1, 
+       cex=0.8,
+       title = "Type of lines")  
 
 
 
@@ -198,10 +219,13 @@ plot(unInstallationsPerDay$Uninstalls ,
      type = "l",
      col = "red"
      ) 
-legend(10,100,legend = c("A","B"),bg = "grey",
-       col=c("red", "blue"), lty=1:2, cex=0.8,
-       title = "Type of lines")  # legend no esta funcionando
 abline(h = uninstallsAverage, col = "orange")
+legend(80,6,legend = c("Uninstallations per day","Unintalls average"),bg = "grey",
+       col=c("red", "orange"), lty=1:1, cex=0.8,
+       title = "Type of lines")  
+
+
+# Joined representation of installs and uninstalls
 
 
 ```
@@ -242,7 +266,7 @@ plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",
 
 plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",col = "green", main = "Sesions and installs")
 lines(installationsPerDay, col= "dark blue" )
-legend (x = 80, y = 300,
+legend (x = 20, y = 200,
         legend = c ("Sesions Per Day" , "Installs per Day"), 
         col = c("green", "dark blue"),
         text.col = c("green","dark blue"))
@@ -250,15 +274,15 @@ legend (x = 80, y = 300,
 
 #####
 # Ejemplo
-x <- seq(-pi, pi, len = 65)
-plot(x, sin(x), type = "l", ylim = c(-1.2, 1.8), col = 3, lty = 2)
-points(x, cos(x), pch = 3, col = 4)
-lines(x, tan(x), type = "b", lty = 1, pch = 4, col = 6)
-title("legend(..., lty = c(2, -1, 1), pch = c(NA, 3, 4), merge = TRUE)",
-      cex.main = 1.1)
-legend(-1, 1.9, c("sin", "cos", "tan"), col = c(3, 4, 6),
-       text.col = "green4", lty = c(2, -1, 1), pch = c(NA, 3, 4),
-       merge = TRUE, bg = "gray90")
+#x <- seq(-pi, pi, len = 65)
+#plot(x, sin(x), type = "l", ylim = c(-1.2, 1.8), col = 3, lty = 2)
+#points(x, cos(x), pch = 3, col = 4)
+#lines(x, tan(x), type = "b", lty = 1, pch = 4, col = 6)
+#title("legend(..., lty = c(2, -1, 1), pch = c(NA, 3, 4), merge = TRUE)",
+#      cex.main = 1.1)
+#legend(-1, 1.9, c("sin", "cos", "tan"), col = c(3, 4, 6),
+#       text.col = "green4", lty = c(2, -1, 1), pch = c(NA, 3, 4),
+#       merge = TRUE, bg = "gray90")
 #####
 
 ```
@@ -311,12 +335,20 @@ for (mth in monthsOfAnalisis) {
   # cojemos de el data frame del mes la cantidad de entradas
   activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
   maus[iterationIndex] = activeUsersOfMonth
-
+plot (maus, 
+      type = "l",
+      xlab = "Month",
+      ylab = "MAUU"
+      ,xaxt="n", 
+      col = "dark red",
+      main = "MAUU per month of analisis")
+axis(side = 1,
+     at = c(1,2,3,4),
+     labels = monthsOfAnalisisName)
 }
 
 # Generamos el plot
-plot (maus, type = "l",xlab = "Month", ylab = "MAUU",xaxt="n", col = "dark red")
-axis(side = 1,at = c(1,2,3,4),labels = monthsOfAnalisisName)
+
 
 ```
 
