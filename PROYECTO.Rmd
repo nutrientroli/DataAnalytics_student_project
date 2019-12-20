@@ -188,17 +188,14 @@ legend(x = 30, y = 70,
        cex=0.8,
        title = "Type of lines")  
 
+paste(" Por lo que indica el grafico podemos ver que las instalaciones medias al dia son unas " , installsAverage , " Es curiosa la tendencia de cada x dias sufrir una caida importante en cuanto a intalaciones. Esto puede deberse a las actividades externas. Debido a la edad de los jugadores podemos suponer que son momentos relacionados con la vida social y familiar ")
+
 
 
 
 ```
 
 #### Draw a second plot where you show the same plot as before, together with the number of uninstallations per day.
-
-```{r, eval=TRUE, echo=TRUE}
-# DANI DEBES MOSTRARLAS EN UN SOLO PLOT
-```
-
 
 ```{r, eval=TRUE, echo=TRUE}
 library(dplyr)
@@ -225,14 +222,33 @@ legend(80,6,legend = c("Uninstallations per day","Unintalls average"),bg = "grey
        title = "Type of lines")  
 
 
+paste ("Por suerte parece que la media de desintalaciones de la muestra ( " , uninstallsAverage , " ) es inferior a la media de instalaciones ( " , installsAverage , " lo cual es positivo debido a que significa que la poblacion formada por los usuarios con el juego instalado aumenta (esto no significa que lo jueguen). Si puediera superponer los graficos podria dar mas infomraicon pero por desgracia no consigo hacerlo por el momento")
+
 # Joined representation of installs and uninstalls
+
+# NO ESTOY SIENDO CAPAZ DE DIBUJAR AMBOS GRAFICOS JUNTOS, EN ESTA OCASION NO SE PORQUE NO ESTA FUNCINOANDO
+
+
+plot( x = installationsPerDay$Installs ,
+     main = "Installations per day Plot",
+     ylab = "Instalations Per Day" ,
+     xlab = "Day of mesure",
+     type = "l",
+     col = c("blue","red")
+     ) 
+abline(h = installsAverage, col = "green")
+lines (unInstallationsPerDay$Uninstalls ,
+     type = "l",
+     col = "red"
+     ) 
+abline(h = uninstallsAverage, col = "orange")
+
+
+
+
 
 
 ```
-
-
-
-
 
 ## DAU
 
@@ -247,7 +263,7 @@ trackingData$Date = NULL;
 trackingData$Date = dte;
 
 trackingDataOnlySesions = trackingData[ trackingData$Action =="Session" ,]
-trackingDataOnlySesions  ## hay repeticiones de usuarios
+# trackingDataOnlySesions  
 
 sesionsPerDay = as.numeric( table( trackingDataOnlySesions$Date)  )
 
@@ -255,8 +271,14 @@ sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
 sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
 sesionsPerDayWithMonth
 
-plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",)
+plot(sesionsPerDay,
+     type = "l",
+     xlab = "Sample Day", 
+     ylab = "Daily active users",
+     main = "DAU",
+     col = "dark green")
 
+paste("Poco depsues del primer mes podemos observar una estabilizacion de los usuarios activos del dia lo cual puede deberse a diversos motivos entre los cuales podemos encontrar primeramente un mayor numero de usuarios o una mayor retencion (especulacion). Por lo general es un crecimiento positivo aunque acaba estancandose alrededor de los 400 a partir del primer mes")
 
 ```
 
@@ -264,13 +286,19 @@ plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",
 
 ```{r, eval=TRUE, echo=TRUE}
 
-plot(sesionsPerDay,type = "l",xlab = "Sample Day", ylab = "DAU/Sesions Per Day",col = "green", main = "Sesions and installs")
+plot(sesionsPerDay,type = "l",
+     xlab = "Sample Day", 
+     ylab = "Amounts",
+     col = "green", 
+     main = "Daily Active users and installs")
 lines(installationsPerDay, col= "dark blue" )
 legend (x = 20, y = 200,
-        legend = c ("Sesions Per Day" , "Installs per Day"), 
+        legend = c ("Daily active users" , "Installs per Day"), 
         col = c("green", "dark blue"),
         text.col = c("green","dark blue"))
 
+paste("ADVERTENCIA: Es posible que este grafico no se vea tal y como es en la preview de rStudio")
+paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de analisis se mantiene bastante estable con pequeños despuntes. Debido a las instalaciones que se realizan cada dia encontramos con que dia a dia los usuarios diarios activos")
 
 #####
 # Ejemplo
@@ -332,9 +360,13 @@ for (mth in monthsOfAnalisis) {
   monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
   monthDataFrameOnlySesions = monthDataFrame[ monthDataFrame$Action =="Session" ,]
   
-  # cojemos de el data frame del mes la cantidad de entradas
+    # cojemos de el data frame del mes la cantidad de entradas
   activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
   maus[iterationIndex] = activeUsersOfMonth
+  
+}
+# Generamos el plot
+
 plot (maus, 
       type = "l",
       xlab = "Month",
@@ -345,10 +377,8 @@ plot (maus,
 axis(side = 1,
      at = c(1,2,3,4),
      labels = monthsOfAnalisisName)
-}
 
-# Generamos el plot
-
+paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy pequeño. Esto puedew deberse (y posiblemente se deba) a que la poblacion de jugadores diarios es aun muy limitada. En los siguientes meses se nota un incremento muy importante debido a que la poblacion ya esta establecida. ")
 
 ```
 
@@ -361,15 +391,15 @@ axis(side = 1,
   # Primero debemos saber el DAU --> Ya lo sabemos
   # Y despues conocer el MAUU del mes --> Ya lo tenemos
 
-  maus                # el mauu de cada mes
-  sesionsPerDayWithMonth       # BASICAMENTE EL DAU DE CADA DIA junto con el mes del cual sale
-  monthsOfAnalisis
+  #maus                # el mauu de cada mes
+  #sesionsPerDayWithMonth       # BASICAMENTE EL DAU DE CADA DIA junto con el mes del cual sale
+  #monthsOfAnalisis
   
   # separate the sesions per each month
   sesionsOfFirstMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[1],]
-    sesionsSecondMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[2],]
-    sesionsThirdMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
-    sesionsForthMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
+  sesionsSecondMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[2],]
+  sesionsThirdMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
+  sesionsForthMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[4],]
   
   sesionsOfFirstMonth
   maus[1]
@@ -388,10 +418,7 @@ axis(side = 1,
   dauMauuThirdMonth = sesionsThirdMonth$sesionsPerDay / maus[3]
   dauMauuForthMonth = sesionsForthMonth$sesionsPerDay / maus[4]
   
-  dauMauuFirstMonth
-  
   dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth,dauMauuForthMonth)
-  
   dauMauuAglomerated
   
   plot(dauMauuAglomerated)
@@ -422,7 +449,11 @@ axis(side = 1,
   averageDauMauPerMonth = averageDaus / maus
   averageDauMauPerMonth
   
-  plot (averageDauMauPerMonth)
+  plot (averageDauMauPerMonth, 
+        xlab = "Months",
+        ylab = "Average DAU/MAUU per month",
+        type ="l",
+        col = "blue")
   
 ```
 
@@ -469,7 +500,7 @@ axis(side = 1,
 
 ```{r, eval=TRUE, echo=TRUE}
   
-
+#Ya que mi Dani actual esta fuera de servicio te he dejado algo que puede serte de ayuda de parte de mi Dani pasado... Si no lo encuentras es que necesitas mas las gafas que yo :D 
 
 ```
 
