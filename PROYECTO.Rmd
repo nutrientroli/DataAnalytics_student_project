@@ -29,29 +29,39 @@ library("ggplot2")
 ```
 
 ```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
-
+  #//INIT_BLOCK------------------------------------------------------------//
 
   daysOfTracking = length(unique(trackingData$Date))
-  daysOfTracking
-
-  paste("El total de dias de tracking es de unos ", (daysOfTracking), " lo cual equivale a 4 meses de analisis")
+  
+  #SHOW
+  daysOfTracking #Hace Falta mostrarlo?
+  paste("El total de dias de tracking es de unos ", daysOfTracking, " lo cual equivale a 4 meses de analisis")
 
 ```
 
 ## 1.2 How many different users have installed the game?
 
 ```{r, eval=TRUE, echo=TRUE}
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
 
-  usersData = read.csv("users.csv", sep = ",", na.strings = "NA")
+  #usersData = read.csv("users.csv", sep = ",", na.strings = "NA") 
+    #--> Porque lo leias?
+  #//INIT_BLOCK------------------------------------------------------------//
   
   usersInstalledTheGame = unique(trackingData$UserID[trackingData$Action == "Install"])
   usersInstalledGameAmount = length(usersInstalledTheGame)
-  usersInstalledGameAmount
   
+  #SHOW
+  usersInstalledGameAmount #Hace Falta mostrarlo?
   paste("Las instalaciones son notorias sumando un total de ", usersInstalledGameAmount)
 ```
 
@@ -59,11 +69,17 @@ library("ggplot2")
 
 ```{r, eval=TRUE, echo=TRUE}
 
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
+  #//INIT_BLOCK------------------------------------------------------------//
+
   usersPlayedGame = unique(trackingData$UserID[trackingData$Action == "Session"])
-
   usersPlayedGameAmount = length(usersPlayedGame)
-  usersPlayedGameAmount
-
+  
+  #SHOW
+  usersPlayedGameAmount #Hace Falta mostrarlo?
   paste("De los usuarios que han jugado encontramos que " , usersPlayedGameAmount, " han jugado al juego")
 
 ```
@@ -72,11 +88,17 @@ library("ggplot2")
 
 ```{r, eval=TRUE, echo=TRUE}
 
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
+  #//INIT_BLOCK------------------------------------------------------------//
+
   usersUninstalledGame = unique(trackingData$UserID[trackingData$Action == "Uninstall"])
-
   usersUninstalledGameAmount = length(usersUninstalledGame)
-  usersUninstalledGameAmount
-
+  
+  #SHOW
+  usersUninstalledGameAmount #Hace Falta mostrarlo?
   paste("Los usuarios que han desintalado el juego, sin importar si lo juegan o no es de ", usersUninstalledGameAmount)
 
 ```
@@ -110,6 +132,10 @@ library("ggplot2")
   userSessionFreq = data.frame(table(temp$UserID))
   averageNofSessions = mean(userSessionFreq$Freq)
   
+  #SHOW
+  averageNofSessions #Hace Falta mostrarlo?
+  paste("La media de número de sesiones realizadas por los usuarios es de ", averageNofSessions, "sesiones. Sobre este valor, hay que tener en cuenta que hay usuarios que aún habiendo instalado el juego, no han jugado.")
+  
   #-------------------------------------------------------------------------------------------------------------------------------
 
 ```
@@ -120,21 +146,28 @@ library("ggplot2")
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  pie (table(usersData$sex), main = "Sex distribtion of players", 
-                            labels = c("Females", "Males"), 
-                            col = rainbow(length(table(usersData$sex)))
-                            )
+  #INIT_BLOCK--------------------------------------------------------------//
+  usersData = read.csv("users.csv", sep = ",", na.strings = "NA") 
+  #//INIT_BLOCK------------------------------------------------------------//
+
+  #SHOW
+  pie(table(usersData$sex), 
+      main = "Sex distribtion of players", 
+      labels = c("Females", "Males"), 
+      col = rainbow(length(table(usersData$sex)))
+      )
+  
+  print("Es apreciable una clara diferencia entre el numero de jugadores y jugadoras dentro de la muestra obtenida. Esto nos indica claramente que el publico principal del juego son hombres")
   
   barplot(table(usersData$age), 
           main = "Age distribution of users", 
           col = rainbow(length(table(usersData$age))),
           ylab = "User amount",
-          xlab = "Age of user")
+          xlab = "Age of user"
+          )
   
-  print("Es apreciable una clara diferencia entre el numero de jugadores y jugadoras dentro de la muestra obtenida. Esto nos indica claramente que el publico principal del juego son hombres")
+  #print("VALORACION GRAFICO EDADES")
   
-  
-
 ```
 
 ##2.2 What is the distribution of age of female players and male players?
