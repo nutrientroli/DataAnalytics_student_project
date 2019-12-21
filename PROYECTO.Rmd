@@ -85,7 +85,7 @@ library("ggplot2")
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  #ES INCORRECTO ESTE CALCULO. AQUI ESTAS HACIENDO MEDIA DE LA DURACION DE LAS SESIONES. NO DEL NUMERO DE SESIONES QUE HA HABIDO.
+  #CREO QUE ES INCORRECTO ESTE CALCULO. AQUI ESTAS HACIENDO MEDIA DE LA DURACION DE LAS SESIONES. NO DEL NUMERO DE SESIONES QUE HA HABIDO.
   #-------------------------------------------------------------------------------------------------------------------------------
   #sessionSelection = trackingData[trackingData$Action == "Session",]
   #sessionAverage = mean(sessionSelection$SessionLenght)
@@ -97,6 +97,20 @@ library("ggplot2")
   #paste("Por lo general encontramos que una cuarta parte de nuestras instalaciones han desintalado el juego en el periodo de los cuatro meses. Ademas casi la totalidad de los usuarios que han instalado el juego han jugado a este siendo una muy pequeña parte la cual ha desinstalado el juego antes de jugarlo.")
   #-------------------------------------------------------------------------------------------------------------------------------
 
+  #CREO QUE ES ESTE CALCULO.
+  #-------------------------------------------------------------------------------------------------------------------------------
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
+  colnames(trackingData)[4] = "SessionLenght"
+  colnames(trackingData)[5] = "MoneySpent"
+  #//INIT_BLOCK------------------------------------------------------------//
+  
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionFreq = data.frame(table(temp$UserID))
+  averageNofSessions = mean(userSessionFreq$Freq)
+  
+  #-------------------------------------------------------------------------------------------------------------------------------
 
 ```
 
