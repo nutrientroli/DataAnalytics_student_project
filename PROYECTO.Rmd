@@ -10,13 +10,13 @@ output:
 ---
 
 ****
-# General overview of the data tracking
+# 1. General overview of the data tracking
 ****
 
 To have a general idea of what has been tracked and for how long, check the datasets provided and answer to
 the following questions:
 
-## How long is the tracking period?
+## 1.1 How long is the tracking period?
 
 ```{r, eval=TRUE, echo=TRUE}
 
@@ -35,74 +35,74 @@ library("ggplot2")
   colnames(trackingData)[5] = "MoneySpent"
 
 
-  daysOfTracking = length(  unique(trackingData$Date))
-daysOfTracking
+  daysOfTracking = length(unique(trackingData$Date))
+  daysOfTracking
 
-paste ("El total de dias de tracking es de unos ", (daysOfTracking) , " lo cual equivale a 4 meses de analisis")
+  paste("El total de dias de tracking es de unos ", (daysOfTracking), " lo cual equivale a 4 meses de analisis")
 
 ```
 
-## How many different users have installed the game?
+## 1.2 How many different users have installed the game?
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  usersData = read.csv("users.csv",sep = ",", na.strings ="NA")
+  usersData = read.csv("users.csv", sep = ",", na.strings = "NA")
   
-  usersInstalledTheGame = unique( trackingData$UserID[trackingData$Action == "Install"])
+  usersInstalledTheGame = unique(trackingData$UserID[trackingData$Action == "Install"])
   usersInstalledGameAmount = length(usersInstalledTheGame)
   usersInstalledGameAmount
   
-  paste(" Las instalaciones son notorias sumando un total de " , usersInstalledGameAmount)
+  paste("Las instalaciones son notorias sumando un total de ", usersInstalledGameAmount)
 ```
 
-## How many different users have played the game during the tracking period?
+## 1.3 How many different users have played the game during the tracking period?
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  usersPlayedGame = unique( trackingData$UserID[trackingData$Action == "Session"] )
+  usersPlayedGame = unique(trackingData$UserID[trackingData$Action == "Session"])
 
   usersPlayedGameAmount = length(usersPlayedGame)
-usersPlayedGameAmount
+  usersPlayedGameAmount
 
-paste ("De los usuarios que han jugado encontramos que " , usersPlayedGameAmount , " han jugado al juego")
+  paste("De los usuarios que han jugado encontramos que " , usersPlayedGameAmount, " han jugado al juego")
 
 ```
 
-## How many users have uninstalled the game?
+## 1.4 How many users have uninstalled the game?
 
 ```{r, eval=TRUE, echo=TRUE}
 
-     usersUninstalledGame = unique( trackingData$UserID[trackingData$Action == "Uninstall"] )
+  usersUninstalledGame = unique(trackingData$UserID[trackingData$Action == "Uninstall"])
 
   usersUninstalledGameAmount = length(usersUninstalledGame)
-usersUninstalledGameAmount
+  usersUninstalledGameAmount
 
-paste ("Los usuarios que han desintalado el juego, sin importar si lo juegan o no es de " , usersUninstalledGameAmount)
+  paste("Los usuarios que han desintalado el juego, sin importar si lo juegan o no es de ", usersUninstalledGameAmount)
 
 ```
 
-## What is the average of the number of sessions played by the users during the tracking period?
+## 1.5 What is the average of the number of sessions played by the users during the tracking period?
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  sessionSelection = trackingData[trackingData$Action == "Session",]
+  #ES INCORRECTO ESTE CALCULO. AQUI ESTAS HACIENDO MEDIA DE LA DURACION DE LAS SESIONES. NO DEL NUMERO DE SESIONES QUE HA HABIDO.
+  #-------------------------------------------------------------------------------------------------------------------------------
+  #sessionSelection = trackingData[trackingData$Action == "Session",]
+  #sessionAverage = mean(sessionSelection$SessionLenght)
+  #sessionAverage
+        #pipe de UNIX Buscar
+  #data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAmount,sessionAverage) %>% t() %>% kable() 
+        #t() cambia columnas por hileras
+        #las pipes sirven para pasar datos de una funcion u objeto a otro 
+  #paste("Por lo general encontramos que una cuarta parte de nuestras instalaciones han desintalado el juego en el periodo de los cuatro meses. Ademas casi la totalidad de los usuarios que han instalado el juego han jugado a este siendo una muy pequeña parte la cual ha desinstalado el juego antes de jugarlo.")
+  #-------------------------------------------------------------------------------------------------------------------------------
 
-sessionAverage = mean(sessionSelection$SessionLenght)
-sessionAverage
-
-#                                                         pipe de UNIX Buscar
-data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAmount,sessionAverage) %>% t() %>% kable() 
-
-# t() cambia columnas por hileras
-# las pipes sirven para pasar datos de una funcion u objeto a otro 
-
-paste ("Por lo general encontramos que una cuarta parte de nuestras instalaciones han desintalado el juego en el periodo de los cuatro meses. Ademas casi la totalidad de los usuarios que han instalado el juego han jugado a este siendo una muy pequeña parte la cual ha desinstalado el juego antes de jugarlo.")
 
 ```
 
-# Demographics of users
+#2. Demographics of users
 
-## What is the distribution of users that are playing the game, in terms of sex and age?
+##2.1 What is the distribution of users that are playing the game, in terms of sex and age?
 
 ```{r, eval=TRUE, echo=TRUE}
 
@@ -123,125 +123,125 @@ paste ("Por lo general encontramos que una cuarta parte de nuestras instalacione
 
 ```
 
-## What is the distribution of age of female players and male players?
+##2.2 What is the distribution of age of female players and male players?
 
 
 ```{r, eval=TRUE, echo=TRUE}
   
 # FEMALES ------------------------------------------------------ //
-femaleSegment = usersData[usersData$sex == "F",]
+  femaleSegment = usersData[usersData$sex == "F",]
 # MALES  ------------------------------------------------------ //
-maleSegment = usersData[usersData$sex == "M",]
+  maleSegment = usersData[usersData$sex == "M",]
 
-boxplot( femaleSegment$age, maleSegment$age, 
+  boxplot(femaleSegment$age, maleSegment$age, 
           main = "Female and Male age comparaison",
           names = c("Female Players", "Male Players"),
           col = c("Green","Blue"),
-         ylab = "Age",
-         xlab = "Population Sample")
+          ylab = "Age",
+          xlab = "Population Sample")
 
-print ("El grafico nos muestra que existe una diferencia sustancial entre la edad en la cual las mujeres juegan y la edad en la que los hombres juegan. Encontramos una diferencia de edad de diez años entre las medias de ambos grupos. Lo que tambien es curioso es que los hombres de mas edad no juegan tanto como las mujeres de esa misma edad lo cual puede darse por varios motivos siendo uno de estos la menor esperanza de vida o la posibilidad de que no existan productos de entretenimiento adecuados para hombres de dicha edad")
+  print ("El grafico nos muestra que existe una diferencia sustancial entre la edad en la cual las mujeres juegan y la edad en la que los hombres juegan. Encontramos una diferencia de edad de diez años entre las medias de ambos grupos. Lo que tambien es curioso es que los hombres de mas edad no juegan tanto como las mujeres de esa misma edad lo cual puede darse por varios motivos siendo uno de estos la menor esperanza de vida o la posibilidad de que no existan productos de entretenimiento adecuados para hombres de dicha edad")
 
 # Conclusión ----------------------------------------------------- //
-print("Conclusión")
-print("Encontramos que en este juego la mayoria de usuarios que lo juegan son hombres que en su mayoria se encuentran entre 30 y 40 años. Estos forman aproximadamente un 60% de la poblacion del juego. Encontramos ademas que el juego atrae la atencion de mujeres de entre 53 y 57 años. Estas ocupan un 40% aproximadamente de la muestra obtenida. En caso de necesidad seria primario centrarse en satisfacer al publico masculino antes que al femenino (en caso de necesidad claro esta).")
+  print("Conclusión")
+  print("Encontramos que en este juego la mayoria de usuarios que lo juegan son hombres que en su mayoria se encuentran entre 30 y 40 años. Estos forman aproximadamente un 60% de la poblacion del juego. Encontramos ademas que el juego atrae la atencion de mujeres de entre 53 y 57 años. Estas ocupan un 40% aproximadamente de la muestra obtenida. En caso de necesidad seria primario centrarse en satisfacer al publico masculino antes que al femenino (en caso de necesidad claro esta).")
 # ----------------------------------------------------------------- //
 
 ```
 
-# Metrics of Player Population
+#3. Metrics of Player Population
 
-## Installs per day
+##3.1 Installs per day
 
 ### How many installations are there per day? 
 
-#### Draw a plot that shows the total number of installations per day. Also draw a line that shows the average of installations. Include a legend describing the two curves. 
+####3.1.1 Draw a plot that shows the total number of installations per day. Also draw a line that shows the average of installations. Include a legend describing the two curves. 
 
 
 ```{r, eval=TRUE, echo=TRUE}
 
-library(dplyr)
+  library(dplyr)
 # daysOfMesure = unique(trackingData$Date)
 
 # Guardamos un data set solo con las instalaciones
-temporalTrackingData = trackingData[trackingData$Action == "Install",]
+  temporalTrackingData = trackingData[trackingData$Action == "Install",]
 
-installationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Installs = length(Action))
-installationsPerDay
+  installationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Installs = length(Action))
+  installationsPerDay
+  
+  installsAverage = mean(installationsPerDay$Installs)
+  installsAverage
 
-installsAverage = mean(installationsPerDay$Installs)
-installsAverage
-
-plot(installationsPerDay$Installs ,
+  plot(installationsPerDay$Installs,
      main = "Installations per day Plot",
-     ylab = "Instalations Per Day" ,
+     ylab = "Instalations Per Day",
      xlab = "Day of mesure",
      type = "l",
      col = "blue"
-     ) 
-abline(h = installsAverage, col = "green")
-legend(x = 30, y = 70,
+     )
+  abline(h = installsAverage, col = "green")
+  legend(x = 30, y = 70,
        legend = c("Installations","Average of installtions"),
        bg = "grey",
        col=c("blue", "green"), 
        lty=1:1, 
        cex=0.8,
-       title = "Type of lines")  
+       title = "Type of lines")
 
-paste(" Por lo que indica el grafico podemos ver que las instalaciones medias al dia son unas " , installsAverage , " Es curiosa la tendencia de cada x dias sufrir una caida importante en cuanto a intalaciones. Esto puede deberse a las actividades externas. Debido a la edad de los jugadores podemos suponer que son momentos relacionados con la vida social y familiar ")
+  paste(" Por lo que indica el grafico podemos ver que las instalaciones medias al dia son unas ", installsAverage, " Es curiosa la tendencia de cada x dias sufrir una caida importante en cuanto a intalaciones. Esto puede deberse a las actividades externas. Debido a la edad de los jugadores podemos suponer que son momentos relacionados con la vida social y familiar ")
 
 
 
 
 ```
 
-#### Draw a second plot where you show the same plot as before, together with the number of uninstallations per day.
+####3.1.2 Draw a second plot where you show the same plot as before, together with the number of uninstallations per day.
 
 ```{r, eval=TRUE, echo=TRUE}
-library(dplyr)
+  library(dplyr)
 
 # UNINSTALLS PER DAY
-temporalTrackingData = trackingData[trackingData$Action == "Uninstall",]
+  temporalTrackingData = trackingData[trackingData$Action == "Uninstall",]
 
-unInstallationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Uninstalls = length(Action))
-unInstallationsPerDay
+  unInstallationsPerDay = temporalTrackingData %>% group_by(Date) %>% summarise(Uninstalls = length(Action))
+  unInstallationsPerDay
 
-uninstallsAverage = mean(unInstallationsPerDay$Uninstalls)
-uninstallsAverage
+  uninstallsAverage = mean(unInstallationsPerDay$Uninstalls)
+  uninstallsAverage
 
-plot(unInstallationsPerDay$Uninstalls ,
+  plot(unInstallationsPerDay$Uninstalls ,
      main = "Unnstallations per day Plot",
      ylab = "uNnstalations Per Day" ,
      xlab = "Day of mesure",
      type = "l",
      col = "red"
      ) 
-abline(h = uninstallsAverage, col = "orange")
-legend(80,6,legend = c("Uninstallations per day","Unintalls average"),bg = "grey",
+  abline(h = uninstallsAverage, col = "orange")
+  legend(80,6,legend = c("Uninstallations per day","Unintalls average"),bg = "grey",
        col=c("red", "orange"), lty=1:1, cex=0.8,
        title = "Type of lines")  
 
 
-paste ("Por suerte parece que la media de desintalaciones de la muestra ( " , uninstallsAverage , " ) es inferior a la media de instalaciones ( " , installsAverage , " lo cual es positivo debido a que significa que la poblacion formada por los usuarios con el juego instalado aumenta (esto no significa que lo jueguen). Si puediera superponer los graficos podria dar mas infomraicon pero por desgracia no consigo hacerlo por el momento")
+  paste ("Por suerte parece que la media de desintalaciones de la muestra ( ", uninstallsAverage, " ) es inferior a la media de instalaciones ( ", installsAverage, " lo cual es positivo debido a que significa que la poblacion formada por los usuarios con el juego instalado aumenta (esto no significa que lo jueguen). Si puediera superponer los graficos podria dar mas infomraicon pero por desgracia no consigo hacerlo por el momento")
 
 # Joined representation of installs and uninstalls
 
 # NO ESTOY SIENDO CAPAZ DE DIBUJAR AMBOS GRAFICOS JUNTOS, EN ESTA OCASION NO SE PORQUE NO ESTA FUNCINOANDO
 
 
-plot( x = installationsPerDay$Installs ,
+  plot(x = installationsPerDay$Installs,
      main = "Installations per day Plot",
-     ylab = "Instalations Per Day" ,
+     ylab = "Instalations Per Day",
      xlab = "Day of mesure",
      type = "l",
      col = c("blue","red")
      ) 
-abline(h = installsAverage, col = "green")
-lines (unInstallationsPerDay$Uninstalls ,
+  abline(h = installsAverage, col = "green")
+  lines(unInstallationsPerDay$Uninstalls,
      type = "l",
      col = "red"
      ) 
-abline(h = uninstallsAverage, col = "orange")
+  abline(h = uninstallsAverage, col = "orange")
 
 
 
@@ -250,55 +250,55 @@ abline(h = uninstallsAverage, col = "orange")
 
 ```
 
-## DAU
+##3.2 DAU
 
-### Compute DAU (Daily Active Users) along the days of the tracking period and show a plot (x axis of the play represents the dates and y axis the value of DAU every day).
+###3.2.1 Compute DAU (Daily Active Users) along the days of the tracking period and show a plot (x axis of the play represents the dates and y axis the value of DAU every day).
 
 ```{r, eval=TRUE, echo=TRUE}
 
 ## Compute DAU (Daily Active Users) along the days of the tracking period
 
-dte = as.Date(trackingData$Date)
-trackingData$Date = NULL;
-trackingData$Date = dte;
+  dte = as.Date(trackingData$Date)
+  trackingData$Date = NULL;
+  trackingData$Date = dte;
 
-trackingDataOnlySesions = trackingData[ trackingData$Action =="Session" ,]
+  trackingDataOnlySesions = trackingData[trackingData$Action == "Session",]
 # trackingDataOnlySesions  
 
-sesionsPerDay = as.numeric( table( trackingDataOnlySesions$Date)  )
+  sesionsPerDay = as.numeric(table(trackingDataOnlySesions$Date))
 
-sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
-sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
-sesionsPerDayWithMonth
+  sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
+  sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
+  sesionsPerDayWithMonth
 
-plot(sesionsPerDay,
+  plot(sesionsPerDay,
      type = "l",
      xlab = "Sample Day", 
      ylab = "Daily active users",
      main = "DAU",
      col = "dark green")
 
-paste("Poco depsues del primer mes podemos observar una estabilizacion de los usuarios activos del dia lo cual puede deberse a diversos motivos entre los cuales podemos encontrar primeramente un mayor numero de usuarios o una mayor retencion (especulacion). Por lo general es un crecimiento positivo aunque acaba estancandose alrededor de los 400 a partir del primer mes")
+  paste("Poco depsues del primer mes podemos observar una estabilizacion de los usuarios activos del dia lo cual puede deberse a diversos motivos entre los cuales podemos encontrar primeramente un mayor numero de usuarios o una mayor retencion (especulacion). Por lo general es un crecimiento positivo aunque acaba estancandose alrededor de los 400 a partir del primer mes")
 
 ```
 
-### After you plot DAU, draw the same plot, but now with two curves: one with DAU per day and the other one with installations per day. Thus, we can evaluate how DAU is related with the number of installations.
+###3.2.2 After you plot DAU, draw the same plot, but now with two curves: one with DAU per day and the other one with installations per day. Thus, we can evaluate how DAU is related with the number of installations.
 
 ```{r, eval=TRUE, echo=TRUE}
 
-plot(sesionsPerDay,type = "l",
+  plot(sesionsPerDay,type = "l",
      xlab = "Sample Day", 
      ylab = "Amounts",
      col = "green", 
      main = "Daily Active users and installs")
-lines(installationsPerDay, col= "dark blue" )
-legend (x = 20, y = 200,
+  lines(installationsPerDay, col= "dark blue" )
+  legend (x = 20, y = 200,
         legend = c ("Daily active users" , "Installs per Day"), 
         col = c("green", "dark blue"),
         text.col = c("green","dark blue"))
 
-paste("ADVERTENCIA: Es posible que este grafico no se vea tal y como es en la preview de rStudio")
-paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de analisis se mantiene bastante estable con pequeños despuntes. Debido a las instalaciones que se realizan cada dia encontramos con que dia a dia los usuarios diarios activos")
+  paste("ADVERTENCIA: Es posible que este grafico no se vea tal y como es en la preview de rStudio")
+  paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de analisis se mantiene bastante estable con pequeños despuntes. Debido a las instalaciones que se realizan cada dia encontramos con que dia a dia los usuarios diarios activos")
 
 #####
 # Ejemplo
@@ -315,7 +315,7 @@ paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de a
 
 ```
 
-## MAUU
+##3.3 MAUU
 
 ### How much is MAUU?
 #### Compute MAUU for each of the months of the tracking period and show it graphically.
@@ -327,64 +327,55 @@ paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de a
 
 # Separemos cada mes y guardemos en este sus usuarios no repetidos
 
-monthsOfAnalisis = unique( month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
-monthsOfAnalisis
-trackingData$Month = month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y"))
-monthsOfAnalisisName = unique(months(trackingData$Date))
-monthsOfAnalisisName
+  monthsOfAnalisis = unique(month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
+  monthsOfAnalisis
+  trackingData$Month = month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y"))
+  monthsOfAnalisisName = unique(months(trackingData$Date))
+  monthsOfAnalisisName
 
 
-GetUniqueUsersOfMonth = function( monthNumericIdentificator, dataStructure) {
-  
-  if (monthNumericIdentificator < 1 || monthNumericIdentificator > 12) {
-    print("Unable to operate with month")
-    return(NULL)
+  GetUniqueUsersOfMonth = function(monthNumericIdentificator, dataStructure) {
+      if(monthNumericIdentificator < 1 || monthNumericIdentificator > 12) {
+        print("Unable to operate with month")
+        return(NULL)
+      }
+      # Comparamos el mes de cada entrada dentro de la estructura de datos y lo comparamos con el mes que le hemos pedido que anlize
+      monthDataFrame = dataStructure[ month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")) == monthNumericIdentificator, ]
+      print("SUCCESS!")
+      return (monthDataFrame)
   }
-  
-  # Comparamos el mes de cada entrada dentro de la estructura de datos y lo comparamos con el mes que le hemos pedido que anlize
-  monthDataFrame = dataStructure[ month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")) == monthNumericIdentificator, ]
 
-  print("SUCCESS!")
-  
-  return (monthDataFrame)
-  
-}
-
-maus = rep(1,length(monthsOfAnalisis))
-iterationIndex = 0
-# Iteramos por cada uno de los meses del analisis
-for (mth in monthsOfAnalisis) {
-  
-  iterationIndex = iterationIndex + 1
-  
-  monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
-  monthDataFrameOnlySesions = monthDataFrame[ monthDataFrame$Action =="Session" ,]
-  
+  maus = rep(1,length(monthsOfAnalisis))
+  iterationIndex = 0
+  # Iteramos por cada uno de los meses del analisis
+  for(mth in monthsOfAnalisis) {
+    iterationIndex = iterationIndex + 1
+    monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
+    monthDataFrameOnlySesions = monthDataFrame[monthDataFrame$Action == "Session",]
     # cojemos de el data frame del mes la cantidad de entradas
-  activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
-  maus[iterationIndex] = activeUsersOfMonth
-  
-}
+    activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
+    maus[iterationIndex] = activeUsersOfMonth
+  }
 # Generamos el plot
 
-plot (maus, 
+  plot (maus, 
       type = "l",
       xlab = "Month",
       ylab = "MAUU"
       ,xaxt="n", 
       col = "dark red",
       main = "MAUU per month of analisis")
-axis(side = 1,
+  axis(side = 1,
      at = c(1,2,3,4),
      labels = monthsOfAnalisisName)
 
-paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy pequeño. Esto puedew deberse (y posiblemente se deba) a que la poblacion de jugadores diarios es aun muy limitada. En los siguientes meses se nota un incremento muy importante debido a que la poblacion ya esta establecida. ")
+  paste("En la primera fase del despliegue del producto el MAUU parecer ser muy pequeño. Esto puedew deberse (y posiblemente se deba) a que la poblacion de jugadores diarios es aun muy limitada. En los siguientes meses se nota un incremento muy importante debido a que la poblacion ya esta establecida.")
 
 ```
 
-## DAU/MAUU ratio
+##3.4 DAU/MAUU ratio
 ### How much is the DAU/MAUU ratio?
-#### Compute DAU/MAUU per day of the month.
+####3.4.1 Compute DAU/MAUU per day of the month.
 
 ```{r, eval=TRUE, echo=TRUE}
   
@@ -418,14 +409,14 @@ paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy 
   dauMauuThirdMonth = sesionsThirdMonth$sesionsPerDay / maus[3]
   dauMauuForthMonth = sesionsForthMonth$sesionsPerDay / maus[4]
   
-  dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth,dauMauuForthMonth)
+  dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth, dauMauuForthMonth)
   dauMauuAglomerated
   
   plot(dauMauuAglomerated)
 
 ```
 
-#### Compute also the average DAU with respect to MAUU which will result in a single ratio per month
+####3.4.2 Compute also the average DAU with respect to MAUU which will result in a single ratio per month
 
 ```{r, eval=TRUE, echo=TRUE}
   
@@ -441,10 +432,10 @@ paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy 
   
   # o esto (media de los dau de un mes partido el mauu de este)
   averageDaus = rep(-1,length(monthsOfAnalisis))
-  averageDaus[1] = mean(  sesionsOfFirstMonth$sesionsPerDay)
-  averageDaus[2] = mean(  sesionsSecondMonth$sesionsPerDay)
-  averageDaus[3] = mean(  sesionsThirdMonth$sesionsPerDay)
-  averageDaus[4] = mean(  sesionsForthMonth$sesionsPerDay)
+  averageDaus[1] = mean(sesionsOfFirstMonth$sesionsPerDay)
+  averageDaus[2] = mean(sesionsSecondMonth$sesionsPerDay)
+  averageDaus[3] = mean(sesionsThirdMonth$sesionsPerDay)
+  averageDaus[4] = mean(sesionsForthMonth$sesionsPerDay)
   
   averageDauMauPerMonth = averageDaus / maus
   averageDauMauPerMonth
@@ -465,19 +456,20 @@ paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy 
 #### Compute the average number of sessions of the users. Show a histogram and/or boxplot and explain the result.
 
 ```{r, eval=TRUE, echo=TRUE}
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
-
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
-
-  temp <- trackingData[which(trackingData$Action == "Session"),]
+  #//INIT_BLOCK------------------------------------------------------------//
   
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionFreq = data.frame(table(temp$UserID))
+  averageNofSessions = mean(userSessionFreq$Freq)
   
-  userSessionFreq <- data.frame(table(temp$UserID))
+  #SHOW
+  #mostrar la de cada usuario, el average total no hace falta no?
   
-  averageNofSessions <- mean(userSessionFreq$Freq)
-
-
 ```
 
 
@@ -486,43 +478,48 @@ paste (" En la primera fase del despliegue del producto el MAUU parecer ser muy 
 #### The dataset shows the time of each session of every day and every user. One way of looking at the time spent by user is to compute the average gamming time of every user (along the different sessions that each user plays) and the standart deviation. Compute this average and standart deviation. Then, plot the distribution of gaming time of the users as histogram. Interpret the results.
 
 ```{r, eval=TRUE, echo=TRUE}
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
-
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
-
-  temp <- trackingData[which(trackingData$Action == "Session"),]
+  #//INIT_BLOCK------------------------------------------------------------//
   
-  userSessionsAverage <- data.frame(summarise(group_by(temp,UserID),TimeSession = mean(SessionLenght)))
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionsAverage = data.frame(summarise(group_by(temp,UserID), TimeSession = mean(SessionLenght)))
+  userSessionsAverageSD = data.frame(summarise(group_by(temp,UserID), TimeSession = sd(SessionLenght)))
+  AvgTimeSpent = mean(userSessionsAverage$TimeSession)
+  AvgStandarDeviation = mean(userSessionsAverageSD$TimeSession)
   
-  userSessionsAverageSD <- data.frame(summarise(group_by(temp,UserID),TimeSession = sd(SessionLenght)))
+  #SHOW
+  AvgTimeSpent
+  AvgStandarDeviation
+  #Mostrar en graficos el de cada usuario?
   
-  AvgTimeSpent <- mean(userSessionsAverage$TimeSession)
-  
-  AvgStandarDeviation <- mean(userSessionsAverageSD$TimeSession)
-
-
 ```
 
 
-## 4.3 Elapsed time between sessions
+##4.3 Elapsed time between sessions
 #### Compute the average time between sessions of each user and draw a boxplot or histogram. Interpret the results.
 
 ```{r, eval=TRUE, echo=TRUE}
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
 
-  usersData = read.csv("users.csv",sep = ",", na.strings ="NA") 
-#----------------------------------/
+  usersData = read.csv("users.csv", sep = ",", na.strings ="NA") 
+  #//INIT_BLOCK------------------------------------------------------------//
 
-temp = trackingData[which(trackingData$Action == "Session"),]
+  temp = trackingData[which(trackingData$Action == "Session"),]
 
-result = data.frame(cbind(UserID=as.character(usersData$UserID),AverageTimeBetweenSessions=rep("", nrow(usersData))), stringsAsFactors = FALSE)
+  result = data.frame(cbind(UserID = as.character(usersData$UserID), AverageTimeBetweenSessions = rep("", nrow(usersData))), stringsAsFactors = FALSE)
 
-hola = temp[temp$UserID == "ID20005210", ]
-#Función a mejorar y optimizar ---> 7 minutos de cálculo...
-for (user in result$UserID) {
+  #check = temp[temp$UserID == "ID20005210",]
+  
+  #FOR a mejorar y optimizar ---> 7 minutos de cálculo...
+  for(user in result$UserID){
     prevDate = 0
     sumTotal = 0
     dates = c(as.character(temp[which(temp$UserID == user),]$Date))
@@ -537,9 +534,10 @@ for (user in result$UserID) {
     }else{
       result[which(result$UserID == user), "AverageTimeBetweenSessions"] = 0
     }
-}
+  }
 
-  
+  #SHOW
+  #result
   
 ```
 
@@ -566,24 +564,28 @@ for (user in result$UserID) {
 #### Compute the average life time of the users. Asume that the users that didn't uninstall the game are still active. Thus, compte LTV of those that are not active any more.
 
 ```{r, eval=TRUE, echo=TRUE}
-#Borrar al acabar------------------/
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
+  #//INIT_BLOCK------------------------------------------------------------//
+
+  temp = trackingData[which(trackingData$Action == "Install"),]
+  usersDateInstalledTheGame = data.frame(UserID=temp$UserID, DateInstall=temp$Date)
+
+  temp = trackingData[which(trackingData$Action == "Uninstall"),]
+  usersDateUninstalledTheGame = data.frame(UserID=temp$UserID, DateUnistall=temp$Date)
+
+  usersDatesLifeTime = merge(usersDateInstalledTheGame,usersDateUninstalledTheGame, all.y=TRUE)
+
+  usersDatesLifeTime = data.frame(usersDatesLifeTime,LifeTime=as_date(as.character(usersDatesLifeTime$DateUnistall)) - as_date(as.character(usersDatesLifeTime$DateInstall)))
+
+  LT_average = mean(usersDatesLifeTime$LifeTime)
   
-#----------------------------------/
-
-temp = trackingData[which(trackingData$Action == "Install"),]
-usersDateInstalledTheGame = data.frame(UserID=temp$UserID, DateInstall=temp$Date)
-
-temp = trackingData[which(trackingData$Action == "Uninstall"),]
-usersDateUninstalledTheGame = data.frame(UserID=temp$UserID, DateUnistall=temp$Date)
-
-usersDatesLifeTime<-merge(usersDateInstalledTheGame,usersDateUninstalledTheGame, all.y=TRUE)
-
-usersDatesLifeTime = data.frame(usersDatesLifeTime,LifeTime=as_date(as.character(usersDatesLifeTime$DateUnistall)) - as_date(as.character(usersDatesLifeTime$DateInstall)))
-
-mean(usersDatesLifeTime$LifeTime)
+  #SHOW
+  #usersDatesLifeTime$LifeTime
+  LT_average
 
 ```
 
@@ -592,21 +594,21 @@ mean(usersDatesLifeTime$LifeTime)
 #### Compute and plot the revenue per day and per month. Also compute the total revenue of the tracking period.
 
 ```{r, eval=TRUE, echo=TRUE}
-#Borrar al acabar------------------/
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
+  #//INIT_BLOCK------------------------------------------------------------//
   
-#----------------------------------/
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersDateSessionsMoneySpent = data.frame(UserID=temp$UserID, Date=temp$Date, Money=temp$MoneySpent, DateMonth=month(as.POSIXlt(temp$Date, format="%Y-%m-%d")))
   
-temp = trackingData[which(trackingData$Action == "Session"),]
-usersDateSessionsMoneySpent = data.frame(UserID=temp$UserID, Date=temp$Date, Money=temp$MoneySpent, DateMonth=month(as.POSIXlt(temp$Date, format="%Y-%m-%d")))
+  sum(usersDateSessionsMoneySpent$Money)
+  summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
+  summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
 
-sum(usersDateSessionsMoneySpent$Money)
-summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
-summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
-
-# Ya tenemos los calculos hechos, hace falta plots y explicar.
+  #SHOW
 
 ```
 
@@ -616,23 +618,22 @@ summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
 
 ```{r, eval=TRUE, echo=TRUE}
 
-#Borrar al acabar------------------/
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
   
-  usersData = read.csv("users.csv",sep = ",", na.strings ="NA")  
-#----------------------------------/
+  usersData = read.csv("users.csv",sep = ",", na.strings ="NA") 
+  #//INIT_BLOCK------------------------------------------------------------//
   
-temp = trackingData[which(trackingData$Action == "Session"),]
-usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
-usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID),Revenue=sum(Money)))   # calculo de revenue por user hecho para otras secciones.
-usersTotal = data.frame(summarise(group_by(usersData,UserID))) #Por si hubieran user repetidos en el CSV
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
+  
+  CR = nrow(usersMoneySpent)/nrow(usersData)
 
-CR = nrow(usersMoneySpent)/nrow(usersData)
-
-# Falta explicar resultado.
+  #SHOW
 ```
 
 
@@ -640,27 +641,28 @@ CR = nrow(usersMoneySpent)/nrow(usersData)
 #### Compute ARPU and ARPPU. Explain the results.
 
 ```{r, eval=TRUE, echo=TRUE}
-#Borrar al acabar------------------/
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
   
   usersData = read.csv("users.csv",sep = ",", na.strings ="NA") 
-#----------------------------------/
-  
-temp = trackingData[which(trackingData$Action == "Session"),]
-usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
-usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID),Revenue=sum(Money)))
+  #//INIT_BLOCK------------------------------------------------------------//  
 
-TotalRevenue = sum(usersMoneySpent$Revenue) 
-Users = nrow(data.frame(summarise(group_by(usersData,UserID))))
-PayUsers = nrow(usersMoneySpent)
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
 
-ARPU = TotalRevenue/Users
-ARPPU = TotalRevenue/PayUsers
+  TotalRevenue = sum(usersMoneySpent$Revenue) 
+  Users = nrow(data.frame(summarise(group_by(usersData, UserID))))
+  PayUsers = nrow(usersMoneySpent)
 
-#Explicar y mostrar resultados
+  ARPU = TotalRevenue/Users
+  ARPPU = TotalRevenue/PayUsers
+
+  #SHOW
 
 ```
 
@@ -669,23 +671,26 @@ ARPPU = TotalRevenue/PayUsers
 #### Compute LTV of every user and the average LTV of the users of the game. Since active users can be still contributing to the game, consider only those users that churned. Draw the distribution of TLV per user and also compute the average LTV.
 
 ```{r, eval=TRUE, echo=TRUE}
-
-#Borrar al acabar------------------/
-  trackingData = read.csv("tracking.csv",sep = ",",na.strings = "NA")
+  
+  #INIT_BLOCK--------------------------------------------------------------//
+  trackingData = read.csv("tracking.csv", sep = ",", na.strings = "NA")
   colnames(trackingData)[4] = "SessionLenght"
   colnames(trackingData)[5] = "MoneySpent"
-#----------------------------------/
+  #//INIT_BLOCK------------------------------------------------------------//
 
-temp = trackingData[which(trackingData$Action == "Uninstall"),]
-usersChurn = data.frame(UserID=temp$UserID)
 
-temp = trackingData[which(trackingData$Action == "Session"),]
-usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID),Revenue=sum(Money)))
-
-usersLTV<-merge(usersChurn,usersMoneySpent, all.x=TRUE)
-usersLTV[is.na(usersLTV$Revenue),'Revenue']=0
-LTV = mean(usersLTV$Revenue)
+  temp = trackingData[which(trackingData$Action == "Uninstall"),]
+  usersChurn = data.frame(UserID=temp$UserID)
+  
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
+  
+  usersLTV = merge(usersChurn,usersMoneySpent, all.x=TRUE)
+  usersLTV[is.na(usersLTV$Revenue),'Revenue'] = 0
+  LTV = mean(usersLTV$Revenue)
+  
+  #SHOW
 ```
 
 
