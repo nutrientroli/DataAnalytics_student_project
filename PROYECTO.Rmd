@@ -722,7 +722,9 @@ Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
 
 # A/B Test
 
-#Retention
+## Retention
+#### Using hypothesis testing, compute whether there are differences between the two versions of te game, with respect retention at day 14
+
 
 ```{r, eval=TRUE, echo=TRUE}
 #1 Which type of inference is this (one sample or two sample)
@@ -758,15 +760,27 @@ n2 <- length(Table1$as.numeric.Group2.)
 
 df <- n1 + n2 - 2
 
-#tobs <- (MeanGroup1 - MeanGroup2)
+s <- sqrt((((n1-1)*(StandardDeviationGroup1^2))+((n2-1)*(StandardDeviationGroup2^2))))/df
+
+tobs <- (MeanGroup1 - MeanGroup2) / s * sqrt((1/n1) + (1/n2))
+
+Quantile <- qt(0.05, df, lower.tail = TRUE)
+
 #5 Compute the p-value
+
+pt(tobs, df, lower.tail = TRUE)
+
+
 #6 Interpret the results
-#help(qt)
+
 
 ```
 
-#PlayTime of users
+##PlayTime of users
+#### Can we conclude that the average play time of users that played versions 1 of the game is greater than those that played version 2? 
 
 ```{r, eval=TRUE, echo=TRUE}
+trackingData = GetTrackinData()
 
+temp = trackingData[which(trackingData$Action == "Session"),]
 ```
