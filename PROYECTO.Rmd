@@ -692,6 +692,41 @@ the following questions:
 #Retention
 
 ```{r, eval=TRUE, echo=TRUE}
+#1 Which type of inference is this (one sample or two sample)
+
+# The inference we are facing in this exercise has two samples one for each version that we are analysing
+
+#2 Write the null and alternative hypothesis
+# Hº: Version 1 = Version 2
+# H': Version 1 != Version 2
+
+#3 Write which method is the most appropiate and why
+# Due to the fact that we face a dataframe far beyond the 30's limit of T-student we should use the Normal Distribution. Also we currently have a bilateral graph.
+
+#4 Compute the hypothesis testing
+
+Group1 <- c(result$AverageTimeBetweenSessions)
+length(Group1) <- length(Group1) / 100
+Group2 <- c(sort(result$AverageTimeBetweenSessions, decreasing = TRUE))
+length(Group2) <- length(Group2) / 100
+
+Table1 <- data.frame(as.numeric(Group1) , as.numeric(Group2))
+
+str(Table1)
+
+MeanGroup1 <- mean(Table1$as.numeric.Group1.)
+MeanGroup2 <- mean(Table1$as.numeric.Group2.)
+
+StandardDeviationGroup1 <- sd(Table1$as.numeric.Group1.)
+StandardDeviationGroup2 <- sd(Table1$as.numeric.Group2.)
+
+ncol(Table1)
+
+help("")
+
+
+#5 Compute the p-value
+#6 Interpret the results
 
 ```
 
