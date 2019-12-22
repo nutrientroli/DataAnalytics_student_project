@@ -809,18 +809,19 @@ temp = trackingData[which(trackingData$Action == "Session"),]
 UsuariosVersion1 <- temp[which(grepl("ID1" , temp$UserID)),]
 UsuariosVersion2 <- temp[which(grepl("ID2" , temp$UserID)),]
 
-MG1 <- mean(UsuariosVersion1$SessionLenght)
-MG2 <- mean(UsuariosVersion2$SessionLenght)
+MG1 <- summarise(group_by(UsuariosVersion1, UserID), mean(SessionLenght))
+MG2 <- summarise(group_by(UsuariosVersion2, UserID), mean(SessionLenght))
 
 SDMG1 <- sd(UsuariosVersion1$SessionLenght)
 SDMG2 <- sd(UsuariosVersion2$SessionLenght)
+
 
 n1.1 <- length(UsuariosVersion1$SessionLenght)
 n2.2 <- length(UsuariosVersion2$SessionLenght)
 
 df2 <- (n1.1 + n2.2) - 2
 
-s <- sqrt((((n1.1-1)*(SDMG1^2))+((n2.2-1)*(SDMG2^2))))/df
+s <- sqrt((((n1.1-1)*(SDMG1^2))+((n2.2-1)*(SDMG2^2))))/df2
 
 zobs <- (MG1 - MG2) / s * sqrt((1/n1.1) + (1/n2.2))
 ```
