@@ -404,7 +404,7 @@ summary {
 <li><a href="#arpu-and-arppu"><span class="toc-section-number">6.4</span> ARPU and ARPPU</a></li>
 <li><a href="#ltv-per-user"><span class="toc-section-number">6.5</span> LTV per user</a></li>
 </ul></li>
-<li><a href="#ab-test"><span class="toc-section-number">7</span> 6 A/B Test</a></li>
+<li><a href="#ab-test"><span class="toc-section-number">7</span> A/B Test</a></li>
 </ul>
 </div>
 
@@ -1348,8 +1348,47 @@ GetUsersData = function() {
 </div>
 </div>
 <div id="ab-test" class="section level1">
-<h1><span class="header-section-number">7</span> 6 A/B Test</h1>
+<h1><span class="header-section-number">7</span> A/B Test</h1>
 <p>#Retention</p>
+<pre class="r"><code>#1 Which type of inference is this (one sample or two sample)
+
+# The inference we are facing in this exercise has two samples one for each version that we are analysing
+
+#2 Write the null and alternative hypothesis
+# Hº: Version 1 = Version 2
+# H&#39;: Version 1 != Version 2
+
+#3 Write which method is the most appropiate and why
+# Due to the fact that we face a dataframe far beyond the 30&#39;s limit of T-student we should use the Normal Distribution. Also we currently have a bilateral graph.
+
+#4 Compute the hypothesis testing
+
+Group1 &lt;- c(result$AverageTimeBetweenSessions)
+length(Group1) &lt;- length(Group1) / 100
+Group2 &lt;- c(sort(result$AverageTimeBetweenSessions, decreasing = TRUE))
+length(Group2) &lt;- length(Group2) / 100
+
+Table1 &lt;- data.frame(as.numeric(Group1) , as.numeric(Group2))
+
+str(Table1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    53 obs. of  2 variables:
+##  $ as.numeric.Group1.: num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ as.numeric.Group2.: num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<pre class="r"><code>MeanGroup1 &lt;- mean(Table1$as.numeric.Group1.)
+MeanGroup2 &lt;- mean(Table1$as.numeric.Group2.)
+
+StandardDeviationGroup1 &lt;- sd(Table1$as.numeric.Group1.)
+StandardDeviationGroup2 &lt;- sd(Table1$as.numeric.Group2.)
+
+n1 &lt;- length(Table1$as.numeric.Group1.)
+n2 &lt;- length(Table1$as.numeric.Group2.)
+
+df &lt;- n1 + n2 - 2
+
+#tobs &lt;- (MeanGroup1 - MeanGroup2)
+#5 Compute the p-value
+#6 Interpret the results
+#help(qt)</code></pre>
 <p>#PlayTime of users</p>
 </div>
 

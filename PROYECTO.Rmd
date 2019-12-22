@@ -573,7 +573,40 @@ the following questions:
   
 #Ya que mi Dani actual esta fuera de servicio te he dejado algo que puede serte de ayuda de parte de mi Dani pasado... Si no lo encuentras es que necesitas mas las gafas que yo :D 
 
+RetentionOfTrackingData = function(DS, daysRetention){
+  resultRetention = daysRetention
+  index = 1
 
+  for (day in daysRetention) {
+    #DataFrame con user, dia instalacion y dia a comprovar.
+    data_installs = data.frame(UserID=DS[which(DS$Action == "Install"),]$UserID, DateInstall=DS[which(DS$Action == "Install"),]$Date, DateRetention=rep("", nrow(DS[which(DS$Action == "Install"),])), stringsAsFactors=FALSE)
+    data_installs[,'DateRetention'] = as_date(as.character(data_installs$DateInstall)) + day
+
+    #DataFrame con user y dia de sesion
+    data_sessions = data.frame(UserID=DS[which(DS$Action == "Session"),]$UserID, DateSession=DS[which(DS$Action == "Session"),]$Date)
+
+    #DataFrame con user con instalacion, dia a comprovar y dia de sesion. Tantos registros de usuario por sesiones que existen.
+    data_result = merge(data_installs, data_sessions, all.x=TRUE)
+
+    #Calculos
+      retention_users = 0
+      for (user in unique(data_result$UserID)){
+
+        if(is.element(unique(as.character(data_result[which(data_result$UserID == user),]$DateRetention)),as.character(data_result[which(data_result$UserID == user),]$DateSession))){
+
+            retention_users = retention_users + 1
+        }
+
+      }
+    resultRetention[index] = retention_users/length(unique(as.character(data_result$UserID)))
+    index = index + 1
+
+  }
+
+  return(resultRetention)
+}
+
+Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
 
 ```
 
@@ -687,7 +720,7 @@ the following questions:
 ```
 
 
-# 6 A/B Test
+# A/B Test
 
 #Retention
 
@@ -720,13 +753,15 @@ MeanGroup2 <- mean(Table1$as.numeric.Group2.)
 StandardDeviationGroup1 <- sd(Table1$as.numeric.Group1.)
 StandardDeviationGroup2 <- sd(Table1$as.numeric.Group2.)
 
-ncol(Table1)
+n1 <- length(Table1$as.numeric.Group1.)
+n2 <- length(Table1$as.numeric.Group2.)
 
-help("")
+df <- n1 + n2 - 2
 
-
+#tobs <- (MeanGroup1 - MeanGroup2)
 #5 Compute the p-value
 #6 Interpret the results
+#help(qt)
 
 ```
 
