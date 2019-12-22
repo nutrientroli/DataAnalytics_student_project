@@ -125,21 +125,6 @@ the following questions:
 
 ```{r, eval=TRUE, echo=TRUE}
 
-  #CREO QUE ES INCORRECTO ESTE CALCULO. AQUI ESTAS HACIENDO MEDIA DE LA DURACION DE LAS SESIONES. NO DEL NUMERO DE SESIONES QUE HA HABIDO.
-  #-------------------------------------------------------------------------------------------------------------------------------
-  #sessionSelection = trackingData[trackingData$Action == "Session",]
-  #sessionAverage = mean(sessionSelection$SessionLenght)
-  #sessionAverage
-        #pipe de UNIX Buscar
-  #data.frame(usersInstalledGameAmount,usersUninstalledGameAmount,usersPlayedGameAmount,sessionAverage) %>% t() %>% kable() 
-        #t() cambia columnas por hileras
-        #las pipes sirven para pasar datos de una funcion u objeto a otro 
-  #paste("Por lo general encontramos que una cuarta parte de nuestras instalaciones han desintalado el juego en el periodo de los cuatro meses. Ademas casi la totalidad de los usuarios que han instalado el juego han jugado a este siendo una muy pequeña parte la cual ha desinstalado el juego antes de jugarlo.")
-  #-------------------------------------------------------------------------------------------------------------------------------
-
-  #CREO QUE ES ESTE CALCULO.
-  #-------------------------------------------------------------------------------------------------------------------------------
-  
   trackingData = GetTrackinData();
   temp = trackingData[which(trackingData$Action == "Session"),]
   userSessionFreq = data.frame(table(temp$UserID))
@@ -149,7 +134,6 @@ the following questions:
   averageNofSessions #Hace Falta mostrarlo?
   paste("La media de número de sesiones realizadas por los usuarios es de ", averageNofSessions, "sesiones. Sobre este valor, hay que tener en cuenta que hay usuarios que aún habiendo instalado el juego, no han jugado.")
   
-  #-------------------------------------------------------------------------------------------------------------------------------
 
 ```
 
@@ -607,6 +591,47 @@ RetentionOfTrackingData = function(DS, daysRetention){
 }
 
 Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
+Retention
+
+daysToRetention = seq(from=1,to=30,by=1)
+Retention = RetentionOfTrackingData(GetTrackinData(), daysToRetention)
+plot(daysToRetention,Retention,
+     xlab = "Dias",
+     ylab = "Retencion",
+     xlim = c(1,30),
+     type ="l",
+     col = "blue",
+     )
+
+
+#Retencion por dia de instalacion
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Install"),]
+  dates = unique(as.character(temp$Date))
+  
+  retentionsA= rep(0, length(dates))
+  retentionsB = rep(0, length(dates))
+  index = 1
+  check = 0
+  for(date in dates){
+    check=check+1
+    if(check<2){
+      print(date)
+      usersA = data.frame(UserID=as.character(temp[temp$Action == "Install" & as.character(temp$Date) == as.character(date),]$UserID))[which()]
+     
+      
+       result = trackingData[which(is.element(as.character(trackingData$UserID), users)),]
+    
+      
+      
+      
+     # retentions[index]=RetentionOfTrackingData("DS filtrado por fecha de instalacion", c(14))
+      
+      index=index+1
+    }
+  }
+
+  retentions
 
 ```
 
