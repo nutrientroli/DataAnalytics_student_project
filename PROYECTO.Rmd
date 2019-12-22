@@ -612,26 +612,23 @@ plot(daysToRetention,Retention,
   retentionsA= rep(0, length(dates))
   retentionsB = rep(0, length(dates))
   index = 1
-  check = 0
   for(date in dates){
-    check=check+1
-    if(check<2){
-      print(date)
-      usersA = data.frame(UserID=as.character(temp[temp$Action == "Install" & as.character(temp$Date) == as.character(date),]$UserID))[which()]
+      users = data.frame(UserID=as.character(temp[temp$Action == "Install" & as.character(temp$Date) == as.character(date),]$UserID))
+      
+      usersA = c(as.character(users[which(grepl("ID1" , users$UserID)),]))
+      usersB = c(as.character(users[which(grepl("ID2" , users$UserID)),]))
      
-      
-       result = trackingData[which(is.element(as.character(trackingData$UserID), users)),]
+      resultA = trackingData[which(is.element(as.character(trackingData$UserID), usersA)),]
+      resultB = trackingData[which(is.element(as.character(trackingData$UserID), usersA)),]
     
-      
-      
-      
-     # retentions[index]=RetentionOfTrackingData("DS filtrado por fecha de instalacion", c(14))
+      retentionsA[index]=RetentionOfTrackingData(resultA, c(14))
+      retentionsB[index]=RetentionOfTrackingData(resultB, c(14))
       
       index=index+1
-    }
   }
 
-  retentions
+  retentionsA
+  retentionsB
 
 ```
 
