@@ -1083,7 +1083,7 @@ Si nos fijamos en la agrupacion con **K = 7**
 
 # Conclusiones
 
-## ¿Que tipo de información podemos sacar de los datos? Puedes estructurar tu explicación en diferentes dimensiones del analisis: numero de jugadores,  jugabilidad, monetización, etc.
+## ¿Que tipo de información podemos sacar de los datos? Puedes estructurar tu explicación en diferentes dimensiones del analisis: numero de jugadores, jugabilidad, monetización, etc.
 
 De la información obtenida podemos concluir lo siguiente:
 
