@@ -436,7 +436,11 @@ En la primera fase del despliegue del producto el MAUU parece ser pequeño debid
   
   dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth, dauMauuForthMonth)
   
-  plot(dauMauuAglomerated)
+  plot(dauMauuAglomerated,
+       main = "Stickiness en base al dia",
+       xlab = "Dia de la muestra",
+       ylab = "Ratio DAU/MAUU",
+       type = "l")
 
 ```
 
@@ -444,7 +448,7 @@ En la primera fase del despliegue del producto el MAUU parece ser pequeño debid
 
 ```{r, eval=TRUE, echo=TRUE}
   
-  # no estoy seguro de si es esto lo que pide
+  # Interpretacion A
   averageDauMaus = rep(-1,length(monthsOfAnalisis))
   averageDauMaus[1] = mean(dauMauuAglomerated[1])
   averageDauMaus[2] = mean(dauMauuAglomerated[2])
@@ -452,9 +456,15 @@ En la primera fase del despliegue del producto el MAUU parece ser pequeño debid
   averageDauMaus[4] = mean(dauMauuAglomerated[4])
   
   averageDauMaus
-  plot(averageDauMaus)
+  plot(averageDauMaus,
+       main = "Media de DAU/MAUU por cada mes",
+       xlab = "Mes",
+       ylab = "Valor medio del mes",
+       color = "blue",
+       type = "l"
+       )
   
-  # o esto (media de los dau de un mes partido el mauu de este)
+  # Interpretacion B (media de los dau de un mes partido el mauu de este)
   averageDaus = rep(-1,length(monthsOfAnalisis))
   averageDaus[1] = mean(sesionsOfFirstMonth$sesionsPerDay)
   averageDaus[2] = mean(sesionsSecondMonth$sesionsPerDay)
@@ -465,10 +475,12 @@ En la primera fase del despliegue del producto el MAUU parece ser pequeño debid
   averageDauMauPerMonth
   
   plot(averageDauMauPerMonth,
-       xlab = "Months",
-       ylab = "Average DAU/MAUU per month",
+       xlab = "Meses",
+       ylab = "Valor",
        type ="l",
+       main = "Media de DAU/MAUU por cada mes",
        col = "blue")
+  
   
 ```
 
