@@ -18,27 +18,28 @@ A continuación se describen que requisitos son necesarios y las funciones cread
 ## Requisitos
 ### Librería "knitr"
 Librería necesaria para poder generar el documento final de la práctica. Se trata de una librería que tiene como propósito generar reports de manera dinámica en R.
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
 library("knitr")
 ```
 
 ### Librería "dplyr"
 Librería necesaria para facilitar la manipulación de datos. Proporciona más funcionalidades de manipulación de datos que el lenguaje de base.
-```{r, eval=TRUE, echo=TRUE}
+```{r eval=TRUE, echo=TRUE, message=FALSE}
 library("dplyr")
 ```
 
 ### Librería "lubridate"
 Librería necesaria para facilitar la manipulación de fechas. Proporciona más funcionalidades de manipulación de fechas que el lenguaje de base.
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
 library("lubridate")
 ```
 
 ### Librería "ggplot2"
 Librería necesaria para mejorar la visualización de los resultados obtenidos. Proporciona mejoras en la creación y visualización de diagramas. 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
 library("ggplot2")
 ```
+
 
 ### Funciones
 Para realizar dicho documento, se ha considerado más oportuno tratar cada ejercicio como una unidad independiente. Facilitando su corrección y ejecución individual. Por ese motivo, se ha creado una série de funciones de aspectos que se repeten en varios ejercicios.
@@ -59,503 +60,16 @@ GetUsersData = function() {
 
 ```
 
-
-****
-# General overview of the data tracking
-****
-
-To have a general idea of what has been tracked and for how long, check the datasets provided and answer to
-the following questions:
-
-## How long is the tracking period?
+Además, se ha creado unas funciones extras para una utilidad muy concreta.
 
 ```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData();
-  daysOfTracking = length(unique(trackingData$Date))
-  
-  #SHOW
-  daysOfTracking #Hace Falta mostrarlo?
-  paste("El total de dias de tracking es de unos ", daysOfTracking, " lo cual equivale a 4 meses de analisis")
-
-```
-
-## How many different users have installed the game?
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData();
-  usersInstalledTheGame = unique(trackingData$UserID[trackingData$Action == "Install"])
-  usersInstalledGameAmount = length(usersInstalledTheGame)
-  
-  #SHOW
-  usersInstalledGameAmount #Hace Falta mostrarlo?
-  paste("Las instalaciones son notorias sumando un total de ", usersInstalledGameAmount)
-```
-
-## How many different users have played the game during the tracking period?
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData();
-  usersPlayedGame = unique(trackingData$UserID[trackingData$Action == "Session"])
-  usersPlayedGameAmount = length(usersPlayedGame)
-  
-  #SHOW
-  usersPlayedGameAmount #Hace Falta mostrarlo?
-  paste("De los usuarios que han jugado encontramos que " , usersPlayedGameAmount, " han jugado al juego")
-
-```
-
-## How many users have uninstalled the game?
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData();
-  usersUninstalledGame = unique(trackingData$UserID[trackingData$Action == "Uninstall"])
-  usersUninstalledGameAmount = length(usersUninstalledGame)
-  
-  #SHOW
-  usersUninstalledGameAmount #Hace Falta mostrarlo?
-  paste("Los usuarios que han desintalado el juego, sin importar si lo juegan o no es de ", usersUninstalledGameAmount)
-
-```
-
-## What is the average of the number of sessions played by the users during the tracking period?
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData();
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  userSessionFreq = data.frame(table(temp$UserID))
-  averageNofSessions = mean(userSessionFreq$Freq)
-  
-  #SHOW
-  averageNofSessions #Hace Falta mostrarlo?
-  paste("La media de número de sesiones realizadas por los usuarios es de ", averageNofSessions, "sesiones. Sobre este valor, hay que tener en cuenta que hay usuarios que aún habiendo instalado el juego, no han jugado.")
-  
-
-```
-
-# Demographics of users
-
-## What is the distribution of users that are playing the game, in terms of sex and age?
-
-```{r, eval=TRUE, echo=TRUE}
-
-  usersData = GetUsersData()
-
-  #SHOW
-  pie(table(usersData$sex), 
-      main = "Sex distribtion of players", 
-      labels = c("Females", "Males"), 
-      col = rainbow(length(table(usersData$sex)))
-      )
-  
-  print("Es apreciable una clara diferencia entre el numero de jugadores y jugadoras dentro de la muestra obtenida. Esto nos indica claramente que el publico principal del juego son hombres")
-  
-  barplot(table(usersData$age), 
-          main = "Age distribution of users", 
-          col = rainbow(length(table(usersData$age))),
-          ylab = "User amount",
-          xlab = "Age of user"
-          )
-  
-  #print("VALORACION GRAFICO EDADES")
-  
-```
-
-## What is the distribution of age of female players and male players?
-
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  usersData = GetUsersData()
-  femaleSegment = usersData[usersData$sex == "F",]
-  maleSegment = usersData[usersData$sex == "M",]
-
-  #SHOW
-  boxplot(femaleSegment$age, maleSegment$age, 
-          main = "Female and Male age comparaison",
-          names = c("Female Players", "Male Players"),
-          col = c("Green","Blue"),
-          ylab = "Age",
-          xlab = "Population Sample")
-
-  print ("El grafico nos muestra que existe una diferencia sustancial entre la edad en la cual las mujeres juegan y la edad en la que los hombres juegan. Encontramos una diferencia de edad de diez años entre las medias de ambos grupos. Lo que tambien es curioso es que los hombres de mas edad no juegan tanto como las mujeres de esa misma edad lo cual puede darse por varios motivos siendo uno de estos la menor esperanza de vida o la posibilidad de que no existan productos de entretenimiento adecuados para hombres de dicha edad")
-
-```
-
-## Conclusión del punto 2
-```{r, eval=TRUE, echo=TRUE}
-# Conclusión ----------------------------------------------------- //
-  print("Encontramos que en este juego la mayoria de usuarios que lo juegan son hombres que en su mayoria se encuentran entre 30 y 40 años. Estos forman aproximadamente un 60% de la poblacion del juego. Encontramos ademas que el juego atrae la atencion de mujeres de entre 53 y 57 años. Estas ocupan un 40% aproximadamente de la muestra obtenida. En caso de necesidad seria primario centrarse en satisfacer al publico masculino antes que al femenino (en caso de necesidad claro esta).")
-# ----------------------------------------------------------------- //
-
-```
-
-# Metrics of Player Population
-
-## Installs per day
-
-### How many installations are there per day? 
-
-#### Draw a plot that shows the total number of installations per day. Also draw a line that shows the average of installations. Include a legend describing the two curves. 
-
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData();
-  temp = trackingData[trackingData$Action == "Install",]
-  installationsPerDay = temp %>% group_by(Date) %>% summarise(Installs = length(Action))
-  installsAverage = mean(installationsPerDay$Installs)
-  
-  #SHOW
-  #str(installationsPerDay)
-  #installsAverage
-
-  plot(installationsPerDay$Installs,
-       main = "Installations per day Plot",
-       ylab = "Instalations Per Day",
-       xlab = "Day of mesure",
-       type = "l",
-       col = "blue"
-       )
-  abline(h = installsAverage, col = "green")
-  legend(x = 30, y = 70,
-         legend = c("Installations","Average of installtions"),
-         bg = "grey",
-         col=c("blue", "green"), 
-         lty=1:1, 
-         cex=0.8,
-         title = "Type of lines")
-
-  paste(" Por lo que indica el grafico podemos ver que las instalaciones medias al dia son unas ", installsAverage, " Es curiosa la tendencia de cada x dias sufrir una caida importante en cuanto a intalaciones. Esto puede deberse a las actividades externas. Debido a la edad de los jugadores podemos suponer que son momentos relacionados con la vida social y familiar ")
-
-
-
-
-```
-
-#### Draw a second plot where you show the same plot as before, together with the number of uninstallations per day.
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData();
-  
-  temp = trackingData[trackingData$Action == "Uninstall",]
-  unInstallationsPerDay = temp %>% group_by(Date) %>% summarise(Uninstalls = length(Action))
-  uninstallsAverage = mean(unInstallationsPerDay$Uninstalls)
-
-  temp = trackingData[trackingData$Action == "Install",]
-  installationsPerDay = temp %>% group_by(Date) %>% summarise(Installs = length(Action))
-  installsAverage = mean(installationsPerDay$Installs)
-
-  plot(x = installationsPerDay$Installs,
-       main = "Installations per day Plot",
-       ylab = "Instalations Per Day",
-       xlab = "Day of mesure",
-       type = "l",
-       col = c("blue","red"),
-       ylim = c(0,max(installationsPerDay$Installs))
-     ) 
-  lines(unInstallationsPerDay$Uninstalls,
-        type = "l",
-        col = "red"
-        ) 
-  abline(h = installsAverage, col = "green")
-  abline(h = uninstallsAverage, col = "orange")
-  
-  
-  paste("Por suerte parece que la media de desintalaciones de la muestra ", uninstallsAverage, " es inferior a la media de instalaciones ", installsAverage, " lo cual es positivo debido a que significa que la poblacion formada por los usuarios con el juego instalado aumenta (esto no significa que lo jueguen). Si puediera superponer los graficos podria dar mas infomraicon pero por desgracia no consigo hacerlo por el momento")
-
-```
-
-## DAU
-
-### Compute DAU (Daily Active Users) along the days of the tracking period and show a plot (x axis of the play represents the dates and y axis the value of DAU every day).
-
-```{r, eval=TRUE, echo=TRUE}
-
-## Compute DAU (Daily Active Users) along the days of the tracking period
-
-  dte = as.Date(trackingData$Date)
-  trackingData$Date = NULL;
-  trackingData$Date = dte;
-
-  trackingDataOnlySesions = trackingData[trackingData$Action == "Session",]
-# trackingDataOnlySesions  
-
-  sesionsPerDay = as.numeric(table(trackingDataOnlySesions$Date))
-
-  sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
-  sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
-  sesionsPerDayWithMonth
-
-  plot(sesionsPerDay,
-     type = "l",
-     xlab = "Sample Day", 
-     ylab = "Daily active users",
-     main = "DAU",
-     col = "dark green")
-
-  paste("Poco depsues del primer mes podemos observar una estabilizacion de los usuarios activos del dia lo cual puede deberse a diversos motivos entre los cuales podemos encontrar primeramente un mayor numero de usuarios o una mayor retencion (especulacion). Por lo general es un crecimiento positivo aunque acaba estancandose alrededor de los 400 a partir del primer mes")
-
-```
-
-### After you plot DAU, draw the same plot, but now with two curves: one with DAU per day and the other one with installations per day. Thus, we can evaluate how DAU is related with the number of installations.
-
-```{r, eval=TRUE, echo=TRUE}
-
-  plot(sesionsPerDay,type = "l",
-     xlab = "Sample Day", 
-     ylab = "Amounts",
-     col = "green", 
-     main = "Daily Active users and installs")
-  lines(installationsPerDay, col= "dark blue" )
-  legend (x = 20, y = 200,
-        legend = c ("Daily active users" , "Installs per Day"), 
-        col = c("green", "dark blue"),
-        text.col = c("green","dark blue"))
-
-  paste("ADVERTENCIA: Es posible que este grafico no se vea tal y como es en la preview de rStudio")
-  paste(" Como se podria esperar el ritmo de instalaciones durante el periodo de analisis se mantiene bastante estable con pequeños despuntes. Debido a las instalaciones que se realizan cada dia encontramos con que dia a dia los usuarios diarios activos")
-
-#####
-# Ejemplo
-#x <- seq(-pi, pi, len = 65)
-#plot(x, sin(x), type = "l", ylim = c(-1.2, 1.8), col = 3, lty = 2)
-#points(x, cos(x), pch = 3, col = 4)
-#lines(x, tan(x), type = "b", lty = 1, pch = 4, col = 6)
-#title("legend(..., lty = c(2, -1, 1), pch = c(NA, 3, 4), merge = TRUE)",
-#      cex.main = 1.1)
-#legend(-1, 1.9, c("sin", "cos", "tan"), col = c(3, 4, 6),
-#       text.col = "green4", lty = c(2, -1, 1), pch = c(NA, 3, 4),
-#       merge = TRUE, bg = "gray90")
-#####
-
-```
-
-## MAUU
-
-### How much is MAUU?
-#### Compute MAUU for each of the months of the tracking period and show it graphically.
-
-```{r, eval=TRUE, echo=TRUE}
- 
-# Dates Info
-# https://www.stat.berkeley.edu/~s133/dates.html
-
-# Separemos cada mes y guardemos en este sus usuarios no repetidos
-
-  monthsOfAnalisis = unique(month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
-  monthsOfAnalisis
-  trackingData$Month = month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y"))
-  monthsOfAnalisisName = unique(months(trackingData$Date))
-  monthsOfAnalisisName
-
-
-  GetUniqueUsersOfMonth = function(monthNumericIdentificator, dataStructure) {
-      if(monthNumericIdentificator < 1 || monthNumericIdentificator > 12) {
-        print("Unable to operate with month")
+GetUniqueUsersOfMonth = function(monthNumericIdentificator, dataStructure) {
+  if(monthNumericIdentificator < 1 || monthNumericIdentificator > 12) {
         return(NULL)
-      }
-      # Comparamos el mes de cada entrada dentro de la estructura de datos y lo comparamos con el mes que le hemos pedido que anlize
-      monthDataFrame = dataStructure[ month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")) == monthNumericIdentificator, ]
-      print("SUCCESS!")
-      return (monthDataFrame)
   }
-
-  maus = rep(1,length(monthsOfAnalisis))
-  iterationIndex = 0
-  # Iteramos por cada uno de los meses del analisis
-  for(mth in monthsOfAnalisis) {
-    iterationIndex = iterationIndex + 1
-    monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
-    monthDataFrameOnlySesions = monthDataFrame[monthDataFrame$Action == "Session",]
-    # cojemos de el data frame del mes la cantidad de entradas
-    activeUsersOfMonth = as.numeric( table( monthDataFrameOnlySesions$Date)  )
-    maus[iterationIndex] = activeUsersOfMonth
-  }
-# Generamos el plot
-
-  plot (maus, 
-      type = "l",
-      xlab = "Month",
-      ylab = "MAUU"
-      ,xaxt="n", 
-      col = "dark red",
-      main = "MAUU per month of analisis")
-  axis(side = 1,
-     at = c(1,2,3,4),
-     labels = monthsOfAnalisisName)
-
-  paste("En la primera fase del despliegue del producto el MAUU parecer ser muy pequeño. Esto puedew deberse (y posiblemente se deba) a que la poblacion de jugadores diarios es aun muy limitada. En los siguientes meses se nota un incremento muy importante debido a que la poblacion ya esta establecida.")
-
-```
-
-## DAU/MAUU ratio
-### How much is the DAU/MAUU ratio?
-#### Compute DAU/MAUU per day of the month.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  # Primero debemos saber el DAU --> Ya lo sabemos
-  # Y despues conocer el MAUU del mes --> Ya lo tenemos
-
-  #maus                # el mauu de cada mes
-  #sesionsPerDayWithMonth       # BASICAMENTE EL DAU DE CADA DIA junto con el mes del cual sale
-  #monthsOfAnalisis
-  
-  # separate the sesions per each month
-  sesionsOfFirstMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[1],]
-  sesionsSecondMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[2],]
-  sesionsThirdMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
-  sesionsForthMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[4],]
-  
-  sesionsOfFirstMonth
-  maus[1]
-  sesionsSecondMonth
-  maus[2]             # hay un aumento muy imporntate en el mau de un mes para el otro
-  sesionsThirdMonth
-  maus[3]
-  sesionsForthMonth
-  maus[4]
-  
-  # Get for each day the relatio between the sesions / MAUU of the month of the day
-  # first month sesions
-  
-  dauMauuFirstMonth = sesionsOfFirstMonth$sesionsPerDay / maus[1]
-  dauMauuSecondMonth = sesionsSecondMonth$sesionsPerDay / maus[2]
-  dauMauuThirdMonth = sesionsThirdMonth$sesionsPerDay / maus[3]
-  dauMauuForthMonth = sesionsForthMonth$sesionsPerDay / maus[4]
-  
-  dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth, dauMauuForthMonth)
-  dauMauuAglomerated
-  
-  plot(dauMauuAglomerated)
-
-```
-
-#### Compute also the average DAU with respect to MAUU which will result in a single ratio per month
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  # no estoy seguro de si es esto lo que pide
-  averageDauMaus = rep(-1,length(monthsOfAnalisis))
-  averageDauMaus[1] = mean(dauMauuAglomerated[1])
-  averageDauMaus[2] = mean(dauMauuAglomerated[2])
-  averageDauMaus[3] = mean(dauMauuAglomerated[3])
-  averageDauMaus[4] = mean(dauMauuAglomerated[4])
-  
-  averageDauMaus
-  plot(averageDauMaus)
-  
-  # o esto (media de los dau de un mes partido el mauu de este)
-  averageDaus = rep(-1,length(monthsOfAnalisis))
-  averageDaus[1] = mean(sesionsOfFirstMonth$sesionsPerDay)
-  averageDaus[2] = mean(sesionsSecondMonth$sesionsPerDay)
-  averageDaus[3] = mean(sesionsThirdMonth$sesionsPerDay)
-  averageDaus[4] = mean(sesionsForthMonth$sesionsPerDay)
-  
-  averageDauMauPerMonth = averageDaus / maus
-  averageDauMauPerMonth
-  
-  plot (averageDauMauPerMonth, 
-        xlab = "Months",
-        ylab = "Average DAU/MAUU per month",
-        type ="l",
-        col = "blue")
-  
-```
-
-# Gameplay Metrics
-#### Now, the analysis looks at the gameplay metrics: number of sessions per user, play time of sessions, etc. 
-#### Answer the following questions.
-
-## Number of sessions per player
-#### Compute the average number of sessions of the users. Show a histogram and/or boxplot and explain the result.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData()
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  userSessionFreq = data.frame(table(temp$UserID))
-  averageNofSessions = mean(userSessionFreq$Freq)
-  
-  #SHOW
-  #mostrar la de cada usuario, el average total no hace falta no?
-  
-```
-
-
-## Play time
-### How much is the average time spent by the users in the playing sessions?
-#### The dataset shows the time of each session of every day and every user. One way of looking at the time spent by user is to compute the average gamming time of every user (along the different sessions that each user plays) and the standart deviation. Compute this average and standart deviation. Then, plot the distribution of gaming time of the users as histogram. Interpret the results.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData()
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  userSessionsAverage = data.frame(summarise(group_by(temp,UserID), TimeSession = mean(SessionLenght)))
-  userSessionsAverageSD = data.frame(summarise(group_by(temp,UserID), TimeSession = sd(SessionLenght)))
-  AvgTimeSpent = mean(userSessionsAverage$TimeSession)
-  AvgStandarDeviation = mean(userSessionsAverageSD$TimeSession)
-  
-  #SHOW
-  AvgTimeSpent
-  AvgStandarDeviation
-  #Mostrar en graficos el de cada usuario?
-  
-```
-
-
-## Elapsed time between sessions
-#### Compute the average time between sessions of each user and draw a boxplot or histogram. Interpret the results.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData()
-  usersData = GetUsersData()
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  result = data.frame(cbind(UserID = as.character(usersData$UserID), AverageTimeBetweenSessions = rep("", nrow(usersData))), stringsAsFactors = FALSE)
-
-  #check = temp[temp$UserID == "ID20005210",]
-  
-  #FOR a mejorar y optimizar ---> 7 minutos de cálculo...
-  #Comentado para poder compilar documento sin esperar.
-#  for(user in result$UserID){
-#    prevDate = 0
-#    sumTotal = 0
-#    dates = c(as.character(temp[which(temp$UserID == user),]$Date))
-#    if(length(dates)>1){
-#      for (date in dates) {
-#        if (prevDate!=0) {
-#            sumTotal = sumTotal + as.numeric(as.character((as_date(as.character(date)) - as_date(as.character(prevDate)))))
-#        }
-#        prevDate = date
-#      }
-#      result[which(result$UserID == user), "AverageTimeBetweenSessions"] = sumTotal/(length(dates)-1)
-#    }else{
-#      result[which(result$UserID == user), "AverageTimeBetweenSessions"] = 0
-#    }
-#  }
-
-  #SHOW
-  #result
-  
-```
-
-
-## Retention
-#### Compute the retention at day 7, day 14, and day 30. Draw a plot that shows these retentions along the days.
-#### **Tip** Since you will need to compute retention several times, the best way is to define a function that does this and that receives the necessary parameters. This is the header of the function:
-#### Retention <- function (DS, dR)
-#### where DS is the dataset, and dR is the retention that you will compute (D7, D14, D30). The function returns a vector with the specific retention computed along the days of tracking period.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-#Ya que mi Dani actual esta fuera de servicio te he dejado algo que puede serte de ayuda de parte de mi Dani pasado... Si no lo encuentras es que necesitas mas las gafas que yo :D 
+  monthDataFrame = dataStructure[month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")) == monthNumericIdentificator,]
+  return (monthDataFrame)
+}
 
 RetentionOfTrackingData = function(DS, daysRetention){
   resultRetention = daysRetention
@@ -590,21 +104,678 @@ RetentionOfTrackingData = function(DS, daysRetention){
   return(resultRetention)
 }
 
-Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
-Retention
+```
+  
+****
+# Resumen general
+****
+
+En este documento se realizan una série de cálculos de métricas y se realizan análisis sobre unos datos concretos. Éstos son un conjunto de datos obtenidos después de haberse realizado un seguimiento de acciones de cada usuario en un videojuego.
+
+Por lo tanto, se puede observar dos ficheros con datos del "tracking" y con la base de usuarios del juego con datos sobre ellos.
+
+Así pues, a continuación se describen y responden a una série de preguntas que ayudarán a entender mejor los datos que se manejan.
+
+## ¿Cuánto tiempo dura el período de seguimiento?
+```{r, eval=TRUE, echo=TRUE}
+  
+  trackingData = GetTrackinData();
+  daysOfTracking = length(unique(trackingData$Date))
+
+```
+
+El seguimiento dura un total de **`r toString(daysOfTracking)` días**.
+
+
+
+## ¿Cuántos usuarios diferentes han instalado el juego?
+```{r, eval=TRUE, echo=TRUE}
+  
+  trackingData = GetTrackinData();
+  usersInstalledTheGame = unique(trackingData$UserID[trackingData$Action == "Install"])
+  usersInstalledGameAmount = length(usersInstalledTheGame)
+
+```
+
+El juego ha sido instalado por **`r toString(usersInstalledGameAmount)` usuarios** diferentes.
+
+
+
+## ¿Cuántos usuarios diferentes han jugado durante el período de seguimiento?
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData();
+  usersPlayedGame = unique(trackingData$UserID[trackingData$Action == "Session"])
+  usersPlayedGameAmount = length(usersPlayedGame)
+
+```
+
+Durante el período de seguimiento han jugado **`r toString(usersPlayedGameAmount)` usuarios** diferentes.
+Se observa que ha disminuido respecto los usuarios que tienen el juego intalado.
+
+
+
+## ¿Cuántos usuarios diferentes han desinstalado el juego?
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData();
+  usersUninstalledGame = unique(trackingData$UserID[trackingData$Action == "Uninstall"])
+  usersUninstalledGameAmount = length(usersUninstalledGame)
+
+```
+
+Se observan **`r toString(usersUninstalledGameAmount)` usuarios** que han desinstalado el juego.
+
+
+
+## ¿Cuál es el promedio del número de sesiones jugadas por los usuarios durante el período de seguimiento?
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData();
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionFreq = data.frame(table(temp$UserID))
+  averageNofSessions = mean(userSessionFreq$Freq)
+
+```
+
+La media de número de sesiones realizadas por los usuarios ha sido de **`r toString(format(round(averageNofSessions, 2), nsmall = 2))` sesiones**. Sobre este valor, se ha de tener en cuenta que hay usuarios que aún habiendo instalado el juego, no han jugado.
+
+
+
+
+# Demografía de los usuarios
+
+## ¿Cuál es la distribución de los usuarios que participan en el juego, en términos de sexo y edad?
+Si observamos el término de sexo:
+```{r, eval=TRUE, echo=TRUE}
+
+  usersData = GetUsersData()
+  temp = table(usersData$sex)
+  pie(temp, 
+      main = "Distribución por sexo de los jugadores", 
+      labels = c("Femenino", "Masculino"), 
+      col = rainbow(length(temp))
+      )
+  
+```  
+
+Se aprecia una clara diferencia entre el número de jugadores masculinos (**`r toString(temp[2])`**) y el número de jugadoras femeninas (**`r toString(temp[1])`**).
+
+Respecto al término de edad:
+```{r, eval=TRUE, echo=TRUE} 
+  
+  usersData = GetUsersData()
+  barplot(table(usersData$age), 
+          main = "Distribución por edad de los usuarios", 
+          col = rainbow(length(table(usersData$age))),
+          ylab = "Usuarios (número de usuarios)",
+          xlab = "Edad"
+          )
+  
+```
+
+Se observa una distribución estraña respecto la edad. Parece que el juego es atractivo para dos segementos de edad diferentes. Se aprecia que los segmentos son de los rangos de edad de los 30 a los 40 y de los 50 a los 60.
+
+
+
+## ¿Cuál es la distribución de edad según el sexo de los jugadores?
+```{r, eval=TRUE, echo=TRUE}
+  
+  usersData = GetUsersData()
+  femaleSegment = usersData[usersData$sex == "F",]
+  maleSegment = usersData[usersData$sex == "M",]
+  boxplot(femaleSegment$age, maleSegment$age, 
+          main = "Comparación de edad según sexo",
+          names = c("Femenino", "Masculino"),
+          col = c("Green","Blue"),
+          ylab = "Edad",
+          xlab = "Jugadores"
+          )
+
+```
+
+El gráfico muestra que existe una diferencia sustancial entre la edad de los jugadores del sexo femenino y la edad en la que los jugadores del sexo masculino. Se observa una diferencia de edad de diez años entre las medias de ambos grupos.
+
+También, es curioso que los jugadores (masculinos) de más edad no jueguen tanto como los jugadores del sexo femenino de esa misma edad. Este hecho puede darse por varios motivos siendo uno de éstos la menor esperanza de vida o la posibilidad de que no existan productos de entretenimiento adecuados para el sexo masculino de dicha edad.
+
+Al observarse la gráfica final, se puede entender realmente el porque existía una distribución de edad estraña.
+
+
+
+
+# Métricas de la población de jugadores
+
+## Instalaciones al día
+
+### ¿Cuántas instalaciones hay por día?
+
+```{r, eval=TRUE, echo=TRUE}
+  trackingData = GetTrackinData();
+  temp = trackingData[trackingData$Action == "Install",]
+  installationsPerDay = temp %>% group_by(Date) %>% summarise(Installs = length(Action))
+  installsAverage = mean(installationsPerDay$Installs)
+``` 
+
+Al día se observa una media de **`r toString(format(round(installsAverage, 2), nsmall = 2))`** instalaciones.
+
+```{r, eval=TRUE, echo=TRUE}
+  plot(installationsPerDay$Installs,
+       main = "Instalaciones por día",
+       ylab = "Instalaciones",
+       xlab = "Día",
+       type = "l",
+       col = "blue"
+       )
+  abline(h = installsAverage, col = "green")
+  legend(x = 30, y = 70,
+         legend = c("Instalaciones","Media de las instalaciones"),
+         bg = "grey",
+         col=c("blue", "green"), 
+         lty=1:1, 
+         cex=0.8,
+         title = "Leyenda de las líneas")
+```
+
+En el gráfico se detallan caídas de número de instalaciones después de períodos con un buen número de instalaciones. Éste hecho, puede ser debido a actividades externas y factores que se desconocen en el estudio.
+
+Si se compara con el número de desinstalaciones al día, se puede obtener información más detallada. Así como poder observar si tiene crecimiento real o no.
+
+```{r, eval=TRUE, echo=TRUE}
+  trackingData = GetTrackinData();
+  
+  temp = trackingData[trackingData$Action == "Uninstall",]
+  unInstallationsPerDay = temp %>% group_by(Date) %>% summarise(Uninstalls = length(Action))
+  uninstallsAverage = mean(unInstallationsPerDay$Uninstalls)
+
+  temp = trackingData[trackingData$Action == "Install",]
+  installationsPerDay = temp %>% group_by(Date) %>% summarise(Installs = length(Action))
+  installsAverage = mean(installationsPerDay$Installs)
+
+  plot(x = installationsPerDay$Installs,
+       main = "Instalaciones y Desintalaciones por día",
+       ylab = "Número de Acciones (instalar o desinstalar)",
+       xlab = "Días",
+       type = "l",
+       col = c("blue","red"),
+       ylim = c(0,max(installationsPerDay$Installs)+25)
+       ) 
+  lines(unInstallationsPerDay$Uninstalls,
+        type = "l",
+        col = "red"
+        ) 
+  abline(h = installsAverage, col = "green")
+  abline(h = uninstallsAverage, col = "orange")
+  legend(x = 30, y = 95,
+         legend = c("Instalaciones","Desinstalaciones", "Media de instalaciones","Media de desinstalaciones"),
+         bg = "grey",
+         col=c("blue", "red", "green", "orange"), 
+         lty=1:1, 
+         cex=0.8,
+         title = "Leyenda de las líneas")
+```
+
+La media de desintalaciones de la muestra (**`r toString(format(round(uninstallsAverage, 2), nsmall = 2))`**) es inferior a la media de instalaciones (**`r toString(format(round(installsAverage, 2), nsmall = 2))`**). Por lo tanto, se puede deducir que está en crecimiento de usuarios.
+
+
+
+## DAU
+
+### ¿Cuánto es el DAU?
+
+```{r, eval=TRUE, echo=TRUE}
+  trackingData = GetTrackinData();
+
+  dtemp = as.Date(trackingData$Date)
+  trackingData$Date = NULL;
+  trackingData$Date = dtemp;
+
+  trackingDataOnlySesions = trackingData[trackingData$Action == "Session",]
+
+  sesionsPerDay = as.numeric(table(trackingDataOnlySesions$Date))
+
+  sesionsPerDayWithMonth = as.data.frame(sesionsPerDay)
+  sesionsPerDayWithMonth$Month = month(as.POSIXlt(unique( trackingDataOnlySesions$Date), format="%d/%m/%Y"))
+
+  plot(sesionsPerDay,
+     type = "l",
+     xlab = "Días", 
+     ylab = "DAU",
+     main = "Progreso del DAU",
+     col = "dark green")
+```
+
+Poco después del primer mes, se observa una estabilización de los usuarios activos al día. Puede deberse a diversos motivos entre los cuales se pueden encontrar primeramente un mayor número de usuarios o una mayor retención (especulación). Por lo general, es un crecimiento positivo aunque acaba estancándose alrededor de los 400 a partir del primer mes.
+
+Para comprovar la valoración realizada sobre si el progreso del DAU aumenta debido a un número mayor de usuarios, se muestra a continuación una gráfica con dichos datos.
+
+```{r, eval=TRUE, echo=TRUE}
+  plot(sesionsPerDay,type = "l",
+     xlab = "Días", 
+     ylab = "Cantidad (DAU y instalaciones)",
+     col = "dark green", 
+     main = "Progreso del DAU y instalaciones")
+  lines(installationsPerDay, col= "dark blue" )
+  legend (x = 20, y = 200,
+        legend = c ("DAU" , "Instalaciones"), 
+        bg = "grey",
+        col = c("dark green", "dark blue"),
+        text.col = c("dark green","dark blue"),
+        lty=1:1, 
+        cex=0.8,
+        title = "Leyenda de las líneas")
+```
+
+Como se puede esperar, el ritmo de instalaciones durante el período de análisis se mantiene estable con pequeños picos. Debido a las instalaciones que se realizan cada día, se observa que el DAU crece debido a los nuevos jugadores. Pero gracias al gráfico se extrae que los jugadores iniciales juegan al juego durante varios días. Permitiendo ver el progreso del DAU de este modo.
+
+
+## MAUU
+
+### ¿Cuánto es el MAUU?
+
+```{r eval=TRUE, echo=TRUE, message=FALSE, warning=FALSE}
+  
+  #trackingData = GetTrackinData()
+
+  monthsOfAnalisis = unique(month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y")))
+  trackingData$Month = month(as.POSIXlt(trackingData$Date, format="%d/%m/%Y"))
+  monthsOfAnalisisName = unique(months(trackingData$Date))
+  
+  maus = rep(1,length(monthsOfAnalisis))
+  iterationIndex = 0
+  # Iteramos por cada uno de los meses del analisis
+  for(mth in monthsOfAnalisis) {
+    iterationIndex = iterationIndex + 1
+    monthDataFrame = GetUniqueUsersOfMonth(mth,trackingData)
+    monthDataFrameOnlySesions = monthDataFrame[monthDataFrame$Action == "Session",]
+    # cojemos de el data frame del mes la cantidad de entradas
+    activeUsersOfMonth = as.numeric(table(monthDataFrameOnlySesions$Date)  )
+    maus[iterationIndex] = activeUsersOfMonth
+  }
+
+  plot (maus, 
+      type = "l",
+      xlab = "Mes",
+      ylab = "MAUU",
+      xaxt="n", 
+      col = "dark red",
+      main = "MAUU por mes")
+  axis(side = 1,
+       at = c(1,2,3,4),
+       labels = monthsOfAnalisisName)
+```
+
+En la primera fase del despliegue del producto el MAUU parece ser pequeño debido a que la población de jugadores diarios es aún limitada. En los siguientes meses se percibe un incremento importante ya que la población ya esta establecida.
+
+
+
+## Ratio DAU/MAUU
+### ¿Cuánto es el ratio DAU/MAUU?
+
+```{r, eval=TRUE, echo=TRUE}
+  
+  # Primero debemos saber el DAU --> Ya lo sabemos
+  # Y despues conocer el MAUU del mes --> Ya lo tenemos
+
+  #maus                # el mauu de cada mes
+  #sesionsPerDayWithMonth       # BASICAMENTE EL DAU DE CADA DIA junto con el mes del cual sale
+  #monthsOfAnalisis
+  
+  # separate the sesions per each month
+  sesionsOfFirstMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[1],]
+  sesionsSecondMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[2],]
+  sesionsThirdMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[3],]
+  sesionsForthMonth = sesionsPerDayWithMonth[sesionsPerDayWithMonth$Month == monthsOfAnalisis[4],]
+  
+  # Get for each day the relatio between the sesions / MAUU of the month of the day
+  # first month sesions
+  
+  dauMauuFirstMonth = sesionsOfFirstMonth$sesionsPerDay / maus[1]
+  dauMauuSecondMonth = sesionsSecondMonth$sesionsPerDay / maus[2]
+  dauMauuThirdMonth = sesionsThirdMonth$sesionsPerDay / maus[3]
+  dauMauuForthMonth = sesionsForthMonth$sesionsPerDay / maus[4]
+  
+  dauMauuAglomerated = c(dauMauuFirstMonth,dauMauuSecondMonth, dauMauuThirdMonth, dauMauuForthMonth)
+  
+  plot(dauMauuAglomerated)
+
+```
+
+
+
+```{r, eval=TRUE, echo=TRUE}
+  
+  # no estoy seguro de si es esto lo que pide
+  averageDauMaus = rep(-1,length(monthsOfAnalisis))
+  averageDauMaus[1] = mean(dauMauuAglomerated[1])
+  averageDauMaus[2] = mean(dauMauuAglomerated[2])
+  averageDauMaus[3] = mean(dauMauuAglomerated[3])
+  averageDauMaus[4] = mean(dauMauuAglomerated[4])
+  
+  averageDauMaus
+  plot(averageDauMaus)
+  
+  # o esto (media de los dau de un mes partido el mauu de este)
+  averageDaus = rep(-1,length(monthsOfAnalisis))
+  averageDaus[1] = mean(sesionsOfFirstMonth$sesionsPerDay)
+  averageDaus[2] = mean(sesionsSecondMonth$sesionsPerDay)
+  averageDaus[3] = mean(sesionsThirdMonth$sesionsPerDay)
+  averageDaus[4] = mean(sesionsForthMonth$sesionsPerDay)
+  
+  averageDauMauPerMonth = averageDaus / maus
+  averageDauMauPerMonth
+  
+  plot(averageDauMauPerMonth,
+       xlab = "Months",
+       ylab = "Average DAU/MAUU per month",
+       type ="l",
+       col = "blue")
+  
+```
+
+
+
+
+# Métricas de Gameplay
+
+## Número de sesiones por jugador
+```{r, eval=TRUE, echo=TRUE}
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionFreq = data.frame(table(temp$UserID))
+  averageNofSessions = mean(userSessionFreq$Freq)
+  
+  boxplot(userSessionFreq$Freq, 
+          main = "Sesiones por usuario",
+          names = c("Sesiones"),
+          col = c("Green"),
+          ylab = "Cantidad",
+          xlab = "Sesiones"
+          )
+```
+
+El número de sesiones de media por el total de usuarios es de **`r toString(format(round(averageNofSessions, 2), nsmall = 2))` sesiones**.
+
+En el anterior gráfico observamos que la gran mayoría de los usuarios juegan entre 6 y 10 sesiones. También se percibe que como mínimo juegan una vez al juego y que los valores máximos normales son de unas 17 sesiones. A destacar, algunos usuarios que juegan más que los valores descritos y se convierten en excepciones de la población.
+
+
+
+## Tiempo de juego
+
+### ¿Cuánto es la media de tiempo destinada por los usuarios en sus sesiones de juego?
+```{r, eval=TRUE, echo=TRUE}
+  
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  userSessionsAverage = data.frame(summarise(group_by(temp,UserID), TimeSession = mean(SessionLenght)))
+  userSessionsAverageSD = data.frame(summarise(group_by(temp,UserID), TimeSession = sd(SessionLenght)))
+  AvgTimeSpent = mean(userSessionsAverage$TimeSession)
+  AvgStandarDeviation = mean(userSessionsAverageSD$TimeSession)
+  
+  barplot(table(userSessionsAverage$TimeSession), 
+          main = "Distribución por edad de los usuarios", 
+          col = rainbow(length(table(userSessionsAverage$TimeSession))),
+          ylab = "Usuarios (número de usuarios)",
+          xlab = "Edad"
+          )
+  
+```
+
+ADVERTENCIA! Falta el comentario del Histogram...
+
+## Tiempo entre sesiones
+
+```{r eval=FALSE, include=FALSE}
+  
+  trackingData = GetTrackinData()
+  usersData = GetUsersData()
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  result = data.frame(cbind(UserID = as.character(usersData$UserID), AverageTimeBetweenSessions = rep("", nrow(usersData))), stringsAsFactors = FALSE)
+  
+  #FOR a mejorar y optimizar ---> 6 minutos de cálculo...
+  for(user in result$UserID){
+    prevDate = 0
+    sumTotal = 0
+    dates = c(as.character(temp[which(temp$UserID == user),]$Date))
+    if(length(dates)>1){
+      for (date in dates) {
+        if (prevDate!=0) {
+            sumTotal = sumTotal + as.numeric(as.character((as_date(as.character(date)) - as_date(as.character(prevDate)))))
+        }
+        prevDate = date
+      }
+      result[which(result$UserID == user), "AverageTimeBetweenSessions"] = sumTotal/(length(dates)-1)
+    }else{
+      result[which(result$UserID == user), "AverageTimeBetweenSessions"] = 0
+    }
+  }
+  
+  boxplot(as.numeric(result$AverageTimeBetweenSessions), 
+          main = "Tiempo entre sesiones por usuario",
+          names = c("Días"),
+          col = c("Green"),
+          ylab = "Días",
+          xlab = "Usuarios"
+          )
+  
+```
+
+En el gráfico se observa que la gran mayoria de usuarios tienen un tiempo entre sesiones sobre el rango de 3 a 5 días. En función del tipo de juego y la plataforma donde se encuentre, este gráfico puede valorarse negativamente o positivamente. Por ejemplo, en un juego móbil, podría verse que el tiempo entre sesión y sesión es elevado. En cambio, en un juego de consola, podría ser una medida buena. 
+
+También se percibe que hay usuarios que vuelven al cabo de un lapso de días muy elevado.
+
+
+
+## Retención
+
+```{r, eval=TRUE, echo=TRUE}
+#Descomentar y borrar el código activo
+#Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
+Retention = c(1,7,14,30)
+```
+
+Al calcular la retención del juego con los datos de la muestra, se obtinen las siguientes retenciones en diferentes días.
+
+Retención día 1: **`r toString(format(round(as.numeric(Retention[1]), 2), nsmall = 2))`**, retención día 7: **`r toString(format(round(as.numeric(Retention[2]), 2), nsmall = 2))`**, retención día 14: **`r toString(format(round(as.numeric(Retention[3]), 2), nsmall = 2))`** y la retención día 30: **`r toString(format(round(as.numeric(Retention[4]), 2), nsmall = 2))`**.
+
+
+```{r, eval=FALSE, echo=TRUE}
 
 daysToRetention = seq(from=1,to=30,by=1)
 Retention = RetentionOfTrackingData(GetTrackinData(), daysToRetention)
 plot(daysToRetention,Retention,
-     xlab = "Dias",
-     ylab = "Retencion",
+     xlab = "Días",
+     ylab = "Retención",
      xlim = c(1,30),
+     ylim = c(0,1),
      type ="l",
      col = "blue",
      )
 
+```
 
-#Retencion por dia de instalacion
+El gráfico de retención es un tipo de gráfico común en muchos proyectos. Muestra una pendiente que desciende y que acaba estabilizándose con un número pequeño de de jugadores que siguen retenidos. Se destaca que a día 1 ya se ha perdido un 40% de los usuarios. 
+
+
+
+
+# Métricas de la Indústria de los Videojuegos
+
+## Tiempo de vida (Life Time)
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Install"),]
+  usersDateInstalledTheGame = data.frame(UserID=temp$UserID, DateInstall=temp$Date)
+
+  temp = trackingData[which(trackingData$Action == "Uninstall"),]
+  usersDateUninstalledTheGame = data.frame(UserID=temp$UserID, DateUnistall=temp$Date)
+
+  usersDatesLifeTime = merge(usersDateInstalledTheGame,usersDateUninstalledTheGame, all.y=TRUE)
+
+  usersDatesLifeTime = data.frame(usersDatesLifeTime,LifeTime=as_date(as.character(usersDatesLifeTime$DateUnistall)) - as_date(as.character(usersDatesLifeTime$DateInstall)))
+
+  LT_average = mean(usersDatesLifeTime$LifeTime)
+
+```
+
+En el juego del estudio, los usuario tienen un tiempo de vida de media de **`r toString(format(round(as.numeric(LT_average), 2), nsmall = 2))` días**.
+
+
+
+## Ingresos diarios (Daily Revenue)
+#### Compute and plot the revenue per day and per month. Also compute the total revenue of the tracking period.
+
+```{r, eval=TRUE, echo=TRUE}
+  
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersDateSessionsMoneySpent = data.frame(UserID=temp$UserID, Date=temp$Date, Money=temp$MoneySpent, DateMonth=month(as.POSIXlt(temp$Date, format="%Y-%m-%d")))
+  
+  group_days = summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
+
+  plot(group_days,
+     xlab = "Días",
+     ylab = "Ingresos",
+     xlim = c(0,120),
+     ylim = c(0,max(group_days$Revenue)),
+     type ="h",
+     col = "blue",
+     )
+  
+  boxplot(group_days$Revenue, 
+          main = "Ingresos por día",
+          names = c("Días"),
+          col = c("Green"),
+          ylab = "Ingresos",
+          xlab = "Días"
+          )
+
+```
+
+De la información que proporcionan los dos gráficos, se puede observar cómo hay un crecimiento de los ingresos por día que coincide con el crecimiento de jugadores, así como el los ingresos medios del día. Generalmente, se ingresa diariamente entre 1500 y 2000 unidades monetarias (se desconoze la moneda). 
+
+```{r, eval=TRUE, echo=TRUE}
+  
+  group_months =summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
+  
+  plot(group_months,
+     xlab = "Meses",
+     ylab = "Ingresos",
+     ylim = c(min(group_months$Revenue),max(group_months$Revenue)),
+     type ="l",
+     col = "blue",
+     xaxt='n',
+     )
+  axis(side = 1,
+       at = c(3,4,5,6),
+       labels = c(group_months$DateMonth)
+       )
+
+  
+  boxplot(group_months$Revenue, 
+          main = "Ingresos por mes",
+          names = c("Meses"),
+          col = c("Green"),
+          ylab = "Ingresos",
+          xlab = "Meses"
+          )
+```
+
+Al visualizar los dos gráficos referentes a los ingresos mensuales, se puede ver un subida de ingresos del primer mes al segundo, pero que después decrece del mes 5 al 6. Si se analizan los motivos de este decrecimiento, se descubrirá que el mes 6 no está completo en la muestra de datos. Por lo que este gráfico puede interpretarse de manera incorrecta sin dicha información.
+
+Respecto a la media de ingresos por mes, se detalla que en cada mes se gana entre 45.000 y 60.000 unidades monetarias. Seguramente, el gráfico muestra unos datos con una desviación devido al mes 6.
+
+```{r, eval=TRUE, echo=TRUE}
+  revenue = sum(usersDateSessionsMoneySpent$Money)
+```
+
+Si se calcula el importe referente a los ingresos generados durante el período de seguimiento, se obtiene un importe de **`r toString(format(round(revenue, 2), nsmall = 2))` unidades monetarias**.
+
+
+
+## Ratio de conversión (CR)
+
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData()
+  usersData = GetUsersData()
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
+  
+  CR = nrow(usersMoneySpent)/nrow(usersData)
+  
+```
+El ratio de conversión del juego es del **`r toString(format(round(CR * 100, 2), nsmall = 2))` %**. Se trata de un ratio muy elevado, ya que significa que más de la mitad de los usuarios han realizado algún pago en el juego. Generalemente es un valor muy inferior al resultado obtenido, aunque puede variar mucho según el tipo de juego y su modelo de ingresos. Se está comparando este ratio con los juegos F2P.
+
+
+
+## ARPU y ARPPU
+
+```{r, eval=TRUE, echo=TRUE}
+
+  trackingData = GetTrackinData()
+  usersData = GetUsersData()  
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
+
+  TotalRevenue = sum(usersMoneySpent$Revenue) 
+  Users = nrow(data.frame(summarise(group_by(usersData, UserID))))
+  PayUsers = nrow(usersMoneySpent)
+
+  ARPU = TotalRevenue/Users
+  ARPPU = TotalRevenue/PayUsers
+
+```
+
+Una vez se ha obtenido las métricas de ARPU (**`r toString(format(round(ARPU, 2), nsmall = 2))`**) y ARPPU (**`r toString(format(round(ARPPU, 2), nsmall = 2))`**), se puede observar cuanto dinero se gastan de manera aproximada o estimada cada usuario (en el caso del ARPU) y cuanto dinero los usuarios que han pagado. Se trata de unos valores que proporcionan información sobre el valor de los usuarios respecto los ingresos totales. De hecho, el ARPPU es más interesante, ya que según esta estimación, los usuarios que pagan, pagarían 77 unidades monetarias.
+
+
+
+## LTV por usuario
+```{r, eval=TRUE, echo=TRUE}
+  
+  trackingData = GetTrackinData()
+  temp = trackingData[which(trackingData$Action == "Uninstall"),]
+  usersChurn = data.frame(UserID=temp$UserID)
+  
+  temp = trackingData[which(trackingData$Action == "Session"),]
+  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
+  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
+  
+  usersLTV = merge(usersChurn,usersMoneySpent, all.x=TRUE)
+  usersLTV[is.na(usersLTV$Revenue),'Revenue'] = 0
+  
+  boxplot(usersLTV$Revenue, 
+          main = "LTV",
+          names = c("Usuarios"),
+          col = c("Green"),
+          ylab = "Ingresos",
+          xlab = "Usuarios"
+          )
+```
+
+La información que se extrae de este boxplot es el rango de ingresos que proporcionan los usuarios durante toda su vida en el juego. Se observa que la gran mayoría realizan muy pocas aportaciones o ninguna, ya que la media está próxima al mínimo de ingresos.
+
+
+```{r, eval=TRUE, echo=TRUE}
+  LTV = mean(usersLTV$Revenue)
+```
+
+De media, la métrica del LTV de este juego es de: **`r toString(format(round(LTV, 2), nsmall = 2))`** unidades monetarias.
+
+
+
+
+
+# Test A/B
+
+## Retención
+### ¿De qué tipo de inferencia se trata?
+```{r, eval=TRUE, echo=TRUE}
   trackingData = GetTrackinData()
   temp = trackingData[which(trackingData$Action == "Install"),]
   dates = unique(as.character(temp$Date))
@@ -626,139 +797,31 @@ plot(daysToRetention,Retention,
       
       index=index+1
   }
-
-  retentionsA
-  retentionsB
-
+  
+  #Fix values sin retención
+  retentionsA = retentionsA[1:105]
+  retentionsB = retentionsB[1:105]
+  
 ```
 
-
-# Game Industry Metrics
-#### Now, the designers aim at investigating the common game industry metrics, i.e., the metrics that are related to monetization. Follow the guidelines provided. As always, you need to provide nice plots and tables, as required also explanations of the results obtained.
-
-## Life Time
-#### Compute the average life time of the users. Asume that the users that didn't uninstall the game are still active. Thus, compte LTV of those that are not active any more.
-
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData()
-  temp = trackingData[which(trackingData$Action == "Install"),]
-  usersDateInstalledTheGame = data.frame(UserID=temp$UserID, DateInstall=temp$Date)
-
-  temp = trackingData[which(trackingData$Action == "Uninstall"),]
-  usersDateUninstalledTheGame = data.frame(UserID=temp$UserID, DateUnistall=temp$Date)
-
-  usersDatesLifeTime = merge(usersDateInstalledTheGame,usersDateUninstalledTheGame, all.y=TRUE)
-
-  usersDatesLifeTime = data.frame(usersDatesLifeTime,LifeTime=as_date(as.character(usersDatesLifeTime$DateUnistall)) - as_date(as.character(usersDatesLifeTime$DateInstall)))
-
-  LT_average = mean(usersDatesLifeTime$LifeTime)
-  
-  #SHOW
-  #usersDatesLifeTime$LifeTime
-  LT_average
-
-```
+**ADVERTENCIA!** Aquí comentarios sobre la muestra y sobre inferencia...
 
 
-## Daily Revenue
-#### Compute and plot the revenue per day and per month. Also compute the total revenue of the tracking period.
 
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData()
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  usersDateSessionsMoneySpent = data.frame(UserID=temp$UserID, Date=temp$Date, Money=temp$MoneySpent, DateMonth=month(as.POSIXlt(temp$Date, format="%Y-%m-%d")))
-  
-  sum(usersDateSessionsMoneySpent$Money)
-  summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
-  summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
-
-  #SHOW
-
-```
+### Hipótesis nula y alternativa
+**Hº:** Version 1 = Version 2.
+**H':** Version 1 != Version 2.
 
 
-## Conversion Rate
-#### Compute the conversion rate of the users of the game. Explain the results.
 
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData()
-  usersData = GetUsersData()
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
-  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
-  
-  CR = nrow(usersMoneySpent)/nrow(usersData)
-
-  #SHOW
-```
+### Método apropiado para el estudio
+**ADVERTENCIA!** traducir... (no se ha traducido por si hay cambios de método)
+Due to the fact that we face a dataframe far beyond the 30's limit of T-student we should use the Normal Distribution. Also we currently have a bilateral graph.
 
 
-## ARPU and ARPPU
-#### Compute ARPU and ARPPU. Explain the results.
 
-```{r, eval=TRUE, echo=TRUE}
-
-  trackingData = GetTrackinData()
-  usersData = GetUsersData()  
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-  usersMoneySpent = usersMoneySpent[usersMoneySpent$Money>0,]
-  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
-
-  TotalRevenue = sum(usersMoneySpent$Revenue) 
-  Users = nrow(data.frame(summarise(group_by(usersData, UserID))))
-  PayUsers = nrow(usersMoneySpent)
-
-  ARPU = TotalRevenue/Users
-  ARPPU = TotalRevenue/PayUsers
-
-  #SHOW
-
-```
-
-
-## LTV per user 
-#### Compute LTV of every user and the average LTV of the users of the game. Since active users can be still contributing to the game, consider only those users that churned. Draw the distribution of TLV per user and also compute the average LTV.
-
-```{r, eval=TRUE, echo=TRUE}
-  
-  trackingData = GetTrackinData()
-  temp = trackingData[which(trackingData$Action == "Uninstall"),]
-  usersChurn = data.frame(UserID=temp$UserID)
-  
-  temp = trackingData[which(trackingData$Action == "Session"),]
-  usersMoneySpent = data.frame(UserID=temp$UserID, Money=temp$MoneySpent)
-  usersMoneySpent = data.frame(summarise(group_by(usersMoneySpent,UserID), Revenue=sum(Money)))
-  
-  usersLTV = merge(usersChurn,usersMoneySpent, all.x=TRUE)
-  usersLTV[is.na(usersLTV$Revenue),'Revenue'] = 0
-  LTV = mean(usersLTV$Revenue)
-  
-  #SHOW
-```
-
-
-# A/B Test
-
-## Retention
-#### Using hypothesis testing, compute whether there are differences between the two versions of te game, with respect retention at day 14
-
-
-```{r, eval=TRUE, echo=TRUE}
-#1 Which type of inference is this (one sample or two sample)
-
-# The inference we are facing in this exercise has two samples one for each version that we are analysing
-
-#2 Write the null and alternative hypothesis
-# Hº: Version 1 = Version 2
-# H': Version 1 != Version 2
-
-#3 Write which method is the most appropiate and why
-# Due to the fact that we face a dataframe far beyond the 30's limit of T-student we should use the Normal Distribution. Also we currently have a bilateral graph.
+### Prueba de hipótesis. ¿Qué tipo de "cola" es?
+```{r, eval=FALSE, echo=TRUE}
 
 #4 Compute the hypothesis testing
 
@@ -787,41 +850,65 @@ s <- sqrt((((n1-1)*(StandardDeviationGroup1^2))+((n2-1)*(StandardDeviationGroup2
 tobs <- (MeanGroup1 - MeanGroup2) / s * sqrt((1/n1) + (1/n2))
 
 Quantile <- qt(0.05, df, lower.tail = TRUE)
+```
+**ADVERTENCIA!** Aquí comentarios sobre el tema...
 
-#5 Compute the p-value
 
+### Calcular el p-value
+```{r, eval=FALSE, echo=TRUE}
 pt(tobs, df, lower.tail = TRUE)
-
-
-#6 Interpret the results
-
-
 ```
+**ADVERTENCIA!** Aquí comentarios sobre el tema...
 
-##PlayTime of users
-#### Can we conclude that the average play time of users that played versions 1 of the game is greater than those that played version 2? 
+### Interpretar resultados
+**ADVERTENCIA!** Aquí comentarios sobre el tema...
 
+
+
+
+## Tiempo de juego de los usuarios 
 ```{r, eval=TRUE, echo=TRUE}
-trackingData = GetTrackinData()
+#
+#trackingData = GetTrackinData()
 
-temp = trackingData[which(trackingData$Action == "Session"),]
+#temp = trackingData[which(trackingData$Action == "Session"),]
 
-UsuariosVersion1 <- temp[which(grepl("ID1" , temp$UserID)),]
-UsuariosVersion2 <- temp[which(grepl("ID2" , temp$UserID)),]
+#UsuariosVersion1 <- temp[which(grepl("ID1" , temp$UserID)),]
+#UsuariosVersion2 <- temp[which(grepl("ID2" , temp$UserID)),]
 
-MG1 <- summarise(group_by(UsuariosVersion1, UserID), mean(SessionLenght))
-MG2 <- summarise(group_by(UsuariosVersion2, UserID), mean(SessionLenght))
+#MG1 <- summarise(group_by(UsuariosVersion1, UserID), mean(SessionLenght))
+#MG2 <- summarise(group_by(UsuariosVersion2, UserID), mean(SessionLenght))
 
-SDMG1 <- sd(UsuariosVersion1$SessionLenght)
-SDMG2 <- sd(UsuariosVersion2$SessionLenght)
+#SDMG1 <- sd(UsuariosVersion1$SessionLenght)
+#SDMG2 <- sd(UsuariosVersion2$SessionLenght)
 
 
-n1.1 <- length(UsuariosVersion1$SessionLenght)
-n2.2 <- length(UsuariosVersion2$SessionLenght)
+#n1.1 <- length(UsuariosVersion1$SessionLenght)
+#n2.2 <- length(UsuariosVersion2$SessionLenght)
 
-df2 <- (n1.1 + n2.2) - 2
+#df2 <- (n1.1 + n2.2) - 2
 
-s <- sqrt((((n1.1-1)*(SDMG1^2))+((n2.2-1)*(SDMG2^2))))/df2
+#s <- sqrt((((n1.1-1)*(SDMG1^2))+((n2.2-1)*(SDMG2^2))))/df2
 
-zobs <- (MG1 - MG2) / s * sqrt((1/n1.1) + (1/n2.2))
+#zobs <- (MG1 - MG2) / s * sqrt((1/n1.1) + (1/n2.2))
+
 ```
+
+
+
+# Clustering
+```{r, eval=TRUE, echo=TRUE}
+
+
+```
+
+
+
+# Conclusiones
+
+
+
+
+
+
+
