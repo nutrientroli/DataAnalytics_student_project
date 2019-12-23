@@ -446,7 +446,7 @@ En la primera fase del despliegue del producto el MAUU parece ser pequeño debid
 
 
 
-```{r, eval=TRUE, echo=TRUE}
+```{r eval=TRUE, echo=TRUE, warning=FALSE}
   
   # Interpretacion A
   averageDauMaus = rep(-1,length(monthsOfAnalisis))
@@ -534,11 +534,11 @@ En el anterior gráfico observamos que la gran mayoría de los usuarios juegan e
   
 ```
 
-ADVERTENCIA! Falta el comentario del Histogram...
+Se observan dos rangos predominantes, de 180 a 200 unidades temporales (parece ser minutos) y de 240 a 280 unidades temporales. Puede tener relación con los dos rangos de edad detectados anteriormente.
 
 ## Tiempo entre sesiones
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=TRUE, include=FALSE}
   
   trackingData = GetTrackinData()
   usersData = GetUsersData()
@@ -582,9 +582,8 @@ También se percibe que hay usuarios que vuelven al cabo de un lapso de días mu
 ## Retención
 
 ```{r, eval=TRUE, echo=TRUE}
-#Descomentar y borrar el código activo
-#Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
-Retention = c(1,7,14,30)
+Retention = RetentionOfTrackingData(GetTrackinData(), c(1,7,14,30))
+#Retention = c(1,7,14,30)
 ```
 
 Al calcular la retención del juego con los datos de la muestra, se obtinen las siguientes retenciones en diferentes días.
@@ -592,11 +591,12 @@ Al calcular la retención del juego con los datos de la muestra, se obtinen las 
 Retención día 1: **`r toString(format(round(as.numeric(Retention[1]), 2), nsmall = 2))`**, retención día 7: **`r toString(format(round(as.numeric(Retention[2]), 2), nsmall = 2))`**, retención día 14: **`r toString(format(round(as.numeric(Retention[3]), 2), nsmall = 2))`** y la retención día 30: **`r toString(format(round(as.numeric(Retention[4]), 2), nsmall = 2))`**.
 
 
-```{r, eval=FALSE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE}
 
 daysToRetention = seq(from=1,to=30,by=1)
 Retention = RetentionOfTrackingData(GetTrackinData(), daysToRetention)
 plot(daysToRetention,Retention,
+     main = "Retención",
      xlab = "Días",
      ylab = "Retención",
      xlim = c(1,30),
@@ -832,23 +832,10 @@ Podemos observar que contamos con dos muestras no emparejadas dado que contamos 
 Debido a que nos encontramos con un dataframe que supera por mucho el limite de 30 que marcaria una distribución T-Student, procederemos a calcular con el metodo de distribución Normal. Además contamos con un grafico bilateral.
 
 ### Prueba de hipótesis. ¿Qué tipo de "cola" es?
-```{r, eval=FALSE, echo=TRUE}
-
-
-##Group1 <- c(result$AverageTimeBetweenSessions)
-##length(Group1) <- length(Group1) / 100
-##Group2 <- c(sort(result$AverageTimeBetweenSessions, decreasing = TRUE))
-##length(Group2) <- length(Group2) / 100
-
-#Table1 <- data.frame(as.numeric(Group1) , as.numeric(Group2))
-
-#str(Table1)
-
+```{r, eval=TRUE, echo=TRUE}
 
 MeanGroup1 <- mean(retentionsA, na.rm = TRUE)
 MeanGroup2 <- mean(retentionsB, na.rm = TRUE)
-
-help(sd)
 
 StandardDeviationGroup1 <- sd(retentionsA, na.rm = TRUE)
 StandardDeviationGroup2 <- sd(retentionsB, na.rm = TRUE)
@@ -856,7 +843,6 @@ StandardDeviationGroup2 <- sd(retentionsB, na.rm = TRUE)
 n1 <- length(retentionsA)
 n2 <- length(retentionsB)
 
-#retentionC <- as.data.frame(retentionsA - retentionsB)
 
 df <- n1 + n2 - 2
 
@@ -866,16 +852,12 @@ s <- sqrt((((n1-1)*(StandardDeviationGroup1^2))+((n2-1)*(StandardDeviationGroup2
 
 zobs <- (MeanGroup1 - MeanGroup2) / s * sqrt((1/n1) + (1/n2))
 
-#tobs <- (MeanGroup1 - MeanGroup2) / s * sqrt((1/n1) + (1/n2))
-
-#Quantile <- qt(0.05, df, lower.tail = TRUE)
 ```
 
 Debido a que nuestra z observada entra dentro del rango delimitado por los quartiles, podemos decir que, no podemos descartar la hipotesis nula.
 
 ### Calcular el p-value
-```{r, eval=FALSE, echo=TRUE}
-#pt(tobs, df, lower.tail = TRUE)
+```{r, eval=TRUE, echo=TRUE}
 pnorm1 <- pnorm(zobs, lower.tail = FALSE)
 ```
 
@@ -902,7 +884,7 @@ El mejor porceso para aproximarse a esta hipotesis es una distribución normal d
 
 ### Prueba la hipotesis. Justifica que tipo de "cola" tiene.
 ```{r, eval=TRUE, echo=TRUE}
-#
+
 trackingData = GetTrackinData()
 
 temp = trackingData[which(trackingData$Action == "Session"),]
@@ -948,8 +930,6 @@ Podemos observar que rechazamos la hipotesis nula debido a que nuestra z observa
 
 # Clustering
 ```{r, eval=TRUE, echo=TRUE}
-
-library(ggplot2)
 
   usersData = GetUsersData()
   trackingData = GetTrackinData()
@@ -1024,8 +1004,7 @@ library(ggplot2)
   
 ```
 
-**ADVERTENCIA**
-El identificador numerico usado en las siguientes explicaciones de cada grupo puede variar dependiendo de la ejecucion de KMeans. 
+El identificador numérico usado en las siguientes explicaciones de cada grupo puede variar dependiendo de la ejecucion de KMeans. 
 
 
 **K = 2**
