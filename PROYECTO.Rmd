@@ -899,11 +899,96 @@ pt(tobs, df, lower.tail = TRUE)
 # Clustering
 ```{r, eval=TRUE, echo=TRUE}
 
+library(ggplot2)
 
+# A) sex                                 --> Encontrado directamene en la base de datos  
+# B) age                                 --> Encontrado directamenete en la base de datos
+# C) average playing time per sesion
+# D) amount spent by the user
+# E) amount spent by the user respect the number of sesions
+# F) number of sesions of the user
 
+  usersData = GetUsersData()
+  trackingData = GetTrackinData()
+  
+  usersSex  = rep(-1,length(usersData$UserID))
+  averagePlayingTimePerSesion = rep(-1,length(usersData$UserID))  # tiempo medio de juego por sesion 
+  moneySpent = rep(-1,length(usersData$UserID))                   # dinero gastado por cada usuario
+  numberOfSesions = rep(-1,length(usersData$UserID))              # sesiones por usuario
+  moneyPerSesion = rep(-1,length(usersData$UserID))               # money spent / sesions
+  
+  counter = 1
+  for (user in usersData$UserID) {
+    
+    # Busca todos los eventos relacionados con el usuario en cuestion
+    userExtractedData = trackingData[trackingData$UserID == user,]
+    userExtractedData = userExtractedData[userExtractedData$Action == "Session",]
+    
+    # B) Sex of user ---------------------------------------------------------------------
+    if (usersData[usersData$UserID == user,]$sex == "M")
+      usersSex[counter] = -1   # Male
+    else 
+      usersSex[counter] = 1   # Female
+    
+    # C) average playing time per sesion of each user ------------------------------------
+    sesionsLenght = as.numeric( userExtractedData[userExtractedData$UserID == user,]$SessionLenght )
+    averagePlayingTimePerSesion[counter] = mean(sesionsLenght)
+    
+    # F) number of sesions of the user ---------------------------------------------------
+    sesionsAmount = length(sesionsLenght)
+    numberOfSesions[counter] = sesionsAmount
+    
+    # D) amount spent by the user ---------------------------------------------------------
+    money = sum( userExtractedData[userExtractedData$UserID == user,]$MoneySpent , na.rm = TRUE)
+    moneySpent[counter] = money
+    
+    # E) amount spent by the user respect the number of sesions ---------------------------
+    moneySpentPerSesion = money / sesionsAmount
+    moneyPerSesion[counter] = moneySpentPerSesion
 
+    # Aumentamos el counter 
+    counter = counter + 1
+  }
+  
+  # unifica los datos encontrados en un solo data frame
+  usersAglomeratedData = data.frame( as.numeric(usersData$age))
+  usersAglomeratedData$Sex = factor(  usersSex)
+  usersAglomeratedData$NumberOfSesions = as.numeric(  numberOfSesions)
+  usersAglomeratedData$averageSesionTime = averagePlayingTimePerSesion
+  usersAglomeratedData$MoneySpent =  moneySpent 
+  usersAglomeratedData$MoneySpentPerSesion = moneyPerSesion
+  
+  # Limpieza 
+  usersAglomeratedData = usersAglomeratedData[usersAglomeratedData$NumberOfSesions != 0,]
+  colnames(usersAglomeratedData) = c("Age", 
+                                     "Sex", 
+                                     "Nº Sesions", 
+                                     "Average Session Time", 
+                                     "Money spent" , 
+                                     "Money spent per Session")
 
+  
+  # CLUSTERING ---------------------------------------------------------------------
+  CalculateClusteringWIthKmeans = function (inputData,kValue, nStart) 
+  {
+    result <- kmeans(inputData,centers = kValue, nstart = nStart)
+    return(result) 
+  }
+  
+  resultKTwo = CalculateClusteringWIthKmeans(usersAglomeratedData,2,50)
+  resultKThree = CalculateClusteringWIthKmeans(usersAglomeratedData,3,50)
+  resultKFour = CalculateClusteringWIthKmeans(usersAglomeratedData,4,50)
+  resultKTen = CalculateClusteringWIthKmeans(usersAglomeratedData,10,50)
+  
+  resultKTwo$centers
+  resultKThree$centers
+  resultKFour$centers
+  resultKTen$centers
+  
+ # FALTA HACER LOS PLOTS Y LOS COMENTARIOS 
+  
 ```
+
 
 
 
