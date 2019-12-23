@@ -523,11 +523,13 @@ En el anterior gráfico observamos que la gran mayoría de los usuarios juegan e
   AvgTimeSpent = mean(userSessionsAverage$TimeSession)
   AvgStandarDeviation = mean(userSessionsAverageSD$TimeSession)
   
-  barplot(table(userSessionsAverage$TimeSession), 
-          main = "Distribución por edad de los usuarios", 
+  hist(userSessionsAverage$TimeSession, 
+          main = "Tiempo de juego", 
           col = rainbow(length(table(userSessionsAverage$TimeSession))),
           ylab = "Usuarios (número de usuarios)",
-          xlab = "Edad"
+          xlab = "Tiempo de juego",
+          xlim = c(min(userSessionsAverage$TimeSession)-100,max(userSessionsAverage$TimeSession)+100),
+          ylim = c(0,1000)
           )
   
 ```
@@ -1102,8 +1104,29 @@ Si nos fijamos en la agrupacion con **K = 7**
 
 # Conclusiones
 
+## ¿Que tipo de información podemos sacar de los datos? Puedes estructurar tu explicación en diferentes dimensiones del analisis: numero de jugadores,  jugabilidad, monetización, etc.
 
+De la información obtenida podemos concluir lo siguiente:
 
+La duración del tracking ha sido de aproximadamente 120 dias, en estos dias unos 5345 usuarios han instalado el juego durante este periodo, siendo 5245 del total los que han llegado a probarlo, pues los 1574 restantes lo desinstalaron antes de siquiera abrirlo. El tiempo promedio de juego por sesion es de 8 sesiones (8.28 para ser exactos). De la totalidad de usuarios el 40% eran mujeres, mientras que el restante 60%, hombres. Según los datos que hemos comentado anteriormente y en consecuencia a estos la tasa media de desinstalaciones es del 13.23 frente al 44.54 de instalaciones. 
+
+Sobre la retención de usuarios, hemos podido observar como despues del primer mes estos se estabilizan alrededor de los 400, lo cual es normal en estos casos y a medida que pase el tiempo ira disminuyendo algo mas incluso. Esto es debido a que durante el lanzamiento muchisima gente se ve involucrada en el juego pero no todos continuan en el de forma constante.
+En cuanto al MAUU parece es algo inferior al inicio a medida que la población del juego se estabiliza.
+De todos los usuarios la gran mayoria tiene entre 6 a 10 sesiones, el valor minimo es de 1 sesión mientras que el maximo es de 17 sesiones. El tiempo medio de vida es de 11.41 dias.
+
+El benficio total generado es de 211.248,05 unidades monetarias. El ratio de conversión es de 52.26%, muy alto dado que mas de la mitad de jugadores estan inviertiendo dinero en el juego. Según el ARPU y ARPPU hemos podido observar que la media de inversión por jugador que paga es de 77 unidades monetarias otra vez una inversión muy alta. El lifetime value es de 41.81 unidades por jugador.
+
+Sobre hypotesis hemos confirmado que la retención de ambas versiones es muy parecida y que el tiempo medio de juego es mayor en la primera version que en la segunda.
+
+## ¿Que problemas has encontrado?, en caso de que haya habido alguno, ¿has tenido que investigar más?.
+
+N/A
+
+## ¿Que recomendaciones se pueden extraer que puedan resultar utiles a los diseñadores del juego?
+
+Según los datos extraidos nuestra recomendación es la siguiente:
+
+Teniendo en cuenta que la población de hombres es superior y que estos son los que invierten mas en el juego, proponemos enfocar el target del juego a un publico mas masculino. Por otro lado con el tiempo medio de sesión de estos, siendo periodos de juego mas cortos, pero mas constantes, debido a este hecho reforzamos la recomendación de situar el target hacia una dirección mas enfocada hacia publico masculino.
 
 
 
