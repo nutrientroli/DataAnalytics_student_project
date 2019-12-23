@@ -918,13 +918,6 @@ pnorm(zobs2, lower.tail = FALSE)
 
 library(ggplot2)
 
-# A) sex                                 --> Encontrado directamene en la base de datos  
-# B) age                                 --> Encontrado directamenete en la base de datos
-# C) average playing time per sesion
-# D) amount spent by the user
-# E) amount spent by the user respect the number of sesions
-# F) number of sesions of the user
-
   usersData = GetUsersData()
   trackingData = GetTrackinData()
   
@@ -941,29 +934,30 @@ library(ggplot2)
     userExtractedData = trackingData[trackingData$UserID == user,]
     userExtractedData = userExtractedData[userExtractedData$Action == "Session",]
     
-    # B) Sex of user ---------------------------------------------------------------------
+    # B) Sexo del usuario ---------------------------------------------------------------------
+    # Debido a que el clustering opera con VALORES NUMERICOS convertimos el character en un valor interpretable
     if (usersData[usersData$UserID == user,]$sex == "M")
       usersSex[counter] = -1   # Male
     else 
       usersSex[counter] = 1   # Female
     
-    # C) average playing time per sesion of each user ------------------------------------
+    # C) tiempo de juego medio de las sesiones ---------------------------------------------
     sesionsLenght = as.numeric( userExtractedData[userExtractedData$UserID == user,]$SessionLenght )
     averagePlayingTimePerSesion[counter] = mean(sesionsLenght)
     
-    # F) number of sesions of the user ---------------------------------------------------
+    # F) cantidad de sesiones regitaradas del jugador --------------------------------------
     sesionsAmount = length(sesionsLenght)
     numberOfSesions[counter] = sesionsAmount
     
-    # D) amount spent by the user ---------------------------------------------------------
+    # D) Dinero gatado por el usuario ---------------------------------------------------------
     money = sum( userExtractedData[userExtractedData$UserID == user,]$MoneySpent , na.rm = TRUE)
     moneySpent[counter] = money
     
-    # E) amount spent by the user respect the number of sesions ---------------------------
+    # E) Dinero gastado por sesion ------------------------------------------------------------
     moneySpentPerSesion = money / sesionsAmount
     moneyPerSesion[counter] = moneySpentPerSesion
 
-    # Aumentamos el counter 
+    # Aumentamos el counter que marca el usuario con el cual estamos operando
     counter = counter + 1
   }
   
@@ -975,7 +969,7 @@ library(ggplot2)
   usersAglomeratedData$MoneySpent =  moneySpent 
   usersAglomeratedData$MoneySpentPerSesion = moneyPerSesion
   
-  # Limpieza 
+  # Limpieza y decoracion
   usersAglomeratedData = usersAglomeratedData[usersAglomeratedData$NumberOfSesions != 0,]
   colnames(usersAglomeratedData) = c("Age", 
                                      "Sex", 
@@ -997,8 +991,9 @@ library(ggplot2)
   
 ```
 
-**ADVERTENCIA:**
+**ADVERTENCIA**
 El identificador numerico usado en las siguientes explicaciones de cada grupo puede variar dependiendo de la ejecucion de KMeans. 
+
 
 **K = 2**
 
@@ -1073,7 +1068,6 @@ Si nos fijamos en la agrupacion con **K = 7**
   - Existe una separacion importante entre **quien gasta mas y quien menos**
   - Por lo general las **mujeres juegan mas**  de forma **mas esporadica**
   
-
 
 # Conclusiones
 
