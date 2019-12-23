@@ -532,7 +532,7 @@ En el anterior gráfico observamos que la gran mayoría de los usuarios juegan e
   
 ```
 
-
+ADVERTENCIA! Falta el comentario del Histogram...
 
 ## Tiempo entre sesiones
 
@@ -646,7 +646,7 @@ En el juego del estudio, los usuario tienen un tiempo de vida de media de **`r t
   group_days = summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
 
   plot(group_days,
-       main = "Ingresos por dia"
+       main = "Ingresos por dia",
      xlab = "Días",
      ylab = "Ingresos",
      xlim = c(0,120),
@@ -672,7 +672,7 @@ De la información que proporcionan los dos gráficos, se puede observar cómo h
   group_months =summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
   
   plot(group_months,
-       main = "ingresos por Mes"
+       main = "ingresos por Mes",
      xlab = "Meses",
      ylab = "Ingresos",
      ylim = c(min(group_months$Revenue),max(group_months$Revenue)),
@@ -900,7 +900,7 @@ El mejor porceso para aproximarse a esta hipotesis es una distribución normal d
 
 ### Prueba la hipotesis. Justifica que tipo de "cola" tiene.
 ```{r, eval=TRUE, echo=TRUE}
-
+#
 trackingData = GetTrackinData()
 
 temp = trackingData[which(trackingData$Action == "Session"),]
@@ -1102,11 +1102,7 @@ Si nos fijamos en la agrupacion con **K = 7**
 
 # Conclusiones
 
-## ¿Que tipo de información podemos sacar de los datos? Puedes estructurar tu explicación en diferentes dimensiones del analisis: numero de jugadores,  jugabilidad, monetización, etc.
 
-## ¿Que problemas has encontrado?, en caso de que haya habido alguno, ¿has tenido que investigar más?.
-
-## ¿Que recomendaciones se pueden extraer que puedan resultar utiles a los diseñadores del juego?
 
 
 
