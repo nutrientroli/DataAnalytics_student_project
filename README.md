@@ -4,21 +4,14 @@ Proyecto de estudiantes
 
 - Problematicas:
 
-DANIEL:
-	- "Draw a second plot where you show the same plot as before, 
-	together with the number of uninstallations per day." 
-	--> 
-	Problemas para unificar dos plots en uno solo (no funciona y no se porque)
-	Linea aproximada = 200
+1. revisar el 4.3 MAUU.
+2. revisar el 4.4 Ratio Dau/Mau
+3. crear grafico Histograma del 5.2 y valorarlo
+4. Activar que ejecute el codigo del 5.3 y del 5.4
+5. del 5.4 hay unos comentarios que eliminar o descomentar. Puestos para que no pete la generación de pdf.
+6. Falta acabar ejercixio 6. he cambiado estructura, mirar en detalle.
+7. empezar y acabar el 7. No sabemos como hacerlo... (dani alguna idea?)
+8. Hacer conclusiones.
+9. Revisar algun plot el idioma.
 
-	El calculo del MAUU puede que sea erroneo debido a los valores tan extraños que
-	me dan el DAU/MAUU donde el primer mes tiene valores muy elevados y el resto valores
-	minimos
-Falta por hacer: 
-
-4.4 Rentention Day 7, 14 and 30
-
-6. Test A/B
-	6.1 Retention Hypothesis
-	6.2 PlayTime of users
-7. Clustering
+HECHO
