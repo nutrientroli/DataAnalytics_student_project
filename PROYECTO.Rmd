@@ -1126,7 +1126,7 @@ N/A
 
 Según los datos extraidos nuestra recomendación es la siguiente:
 
-Teniendo en cuenta que la población de hombres es superior y que estos son los que invierten mas en el juego, proponemos enfocar el target del juego a un publico mas masculino. No solo nos encontramos que estos invierten mas sino que presentan una situacion de juego diaria mas esporadica. Con esto queremos decir que adaptar el juego a sesinoes cortas podria ser una buena idea.
+Teniendo en cuenta que la población de hombres es superior y que estos son los que invierten mas en el juego, proponemos enfocar el target del juego a un publico mas masculino. No solo nos encontramos que estos invierten mas sino que presentan una situacion de juego diaria mas esporadica. Con esto queremos decir que adaptar el juego a sesiones mas cortas podria ser una buena idea.
 
 Y no solo enfocarlo a publico masculino sino tambien a un publico mas joven ya que la media de edad del publico masculino es menor.
 
