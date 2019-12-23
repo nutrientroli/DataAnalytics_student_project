@@ -774,7 +774,7 @@ De media, la métrica del LTV de este juego es de: **`r toString(format(round(LT
 # Test A/B
 
 ## Retención
-### ¿De qué tipo de inferencia se trata?
+
 ```{r, eval=TRUE, echo=TRUE}
   trackingData = GetTrackinData()
   temp = trackingData[which(trackingData$Action == "Install"),]
@@ -804,26 +804,23 @@ De media, la métrica del LTV de este juego es de: **`r toString(format(round(LT
   
 ```
 
-**ADVERTENCIA!** Aquí comentarios sobre la muestra y sobre inferencia...
 
+### ¿De qué tipo de inferencia se trata?
 
+Podemos observar que contamos con dos muestras no emparejadas dado que contamos con la versión del juego uno y la dos con distintos tipos de id jugador para cada una.
 
 ### Hipótesis nula y alternativa
 **Hº:** Version 1 = Version 2.
+
 **H':** Version 1 != Version 2.
 
-
-
 ### Método apropiado para el estudio
-**ADVERTENCIA!** traducir... (no se ha traducido por si hay cambios de método)
-Due to the fact that we face a dataframe far beyond the 30's limit of T-student we should use the Normal Distribution. Also we currently have a bilateral graph.
 
-
+Debido a que nos encontramos con un dataframe que supera por mucho el limite de 30 que marcaria una distribución T-Student, procederemos a calcular con el metodo de distribución Normal. Además contamos con un grafico bilateral.
 
 ### Prueba de hipótesis. ¿Qué tipo de "cola" es?
 ```{r, eval=FALSE, echo=TRUE}
 
-#4 Compute the hypothesis testing
 
 ##Group1 <- c(result$AverageTimeBetweenSessions)
 ##length(Group1) <- length(Group1) / 100
@@ -860,23 +857,37 @@ zobs <- (MeanGroup1 - MeanGroup2) / s * sqrt((1/n1) + (1/n2))
 
 #Quantile <- qt(0.05, df, lower.tail = TRUE)
 ```
-**ADVERTENCIA!** Aquí comentarios sobre el tema...
 
+Debido a que nuestra z observada entra dentro del rango delimitado por los quartiles, podemos decir que, no podemos descartar la hipotesis nula.
 
 ### Calcular el p-value
 ```{r, eval=FALSE, echo=TRUE}
 #pt(tobs, df, lower.tail = TRUE)
-pnorm(zobs, lower.tail = FALSE)
+pnorm1 <- pnorm(zobs, lower.tail = FALSE)
 ```
-**ADVERTENCIA!** Aquí comentarios sobre el tema...
+
+Según el p-value podemos asegurar de que no podemos descartar la hipotesis nula con un 48% de seguridad.
 
 ### Interpretar resultados
-**ADVERTENCIA!** Aquí comentarios sobre el tema...
+
+Como conclusión creemos que, la retención entre las dos versiones es muy similar, por lo que no hay apenas diferencia entre una u otra a la hora de retener a los jugadores.
+
+## Tiempo de Juego de los usuarios
+
+###¿Que  tipo de inferencia es?
+Tenemos la misma situación que en el ejercicio anterior, dos muestras no relacionadas separadas por versión de juego y con ids distintos.
+
+### Escribe las hipotesis nula y alternativa
+**Hº:** Version 1 <= Version 2.
+
+**H':** Version 1 > Version 2.
+
+### ¿Cual seria el metodo mas preciso de aproximación?
+
+El mejor porceso para aproximarse a esta hipotesis es una distribución normal debido a la gran cantidad de datos que nos aporta el dataframe y tenemos como foco un grafico unilateral por la derecha.
 
 
-
-
-## Tiempo de juego de los usuarios 
+### Prueba la hipotesis. Justifica que tipo de "cola" tiene.
 ```{r, eval=TRUE, echo=TRUE}
 #
 trackingData = GetTrackinData()
@@ -889,8 +900,8 @@ UsuariosVersion2 <- temp[which(grepl("ID2" , temp$UserID)),]
 MG1 <- summarise(group_by(UsuariosVersion1, UserID), mean(SessionLenght))
 MG2 <- summarise(group_by(UsuariosVersion2, UserID), mean(SessionLenght))
 
-mean(MG1$`mean(SessionLenght)`)
-mean(MG2$`mean(SessionLenght)`)
+meanMG1 <- mean(MG1$`mean(SessionLenght)`)
+meanMG2 <- mean(MG2$`mean(SessionLenght)`)
 
 SDMG1 <- sd(UsuariosVersion1$SessionLenght)
 SDMG2 <- sd(UsuariosVersion2$SessionLenght)
@@ -907,9 +918,19 @@ s2 <- sqrt((((22207 * 8281) + (22065 * 3600)) / 44270))
 
 zobs2 <- ((93.713) / (s2 * (sqrt(1/n1.1 + 1/n2.2))))
 
-pnorm(zobs2, lower.tail = FALSE)
+
 
 ```
+### Computa el p-value.
+
+```{r, eval=TRUE, echo=TRUE}
+
+pnorm2 <- pnorm(zobs2, lower.tail = FALSE)
+
+```
+### Interpreta los resultados.
+
+Podemos observar que rechazamos la hipotesis nula debido a que nuestra z observada se encuentra fuera del rango de nuestro quartil. Por otro lado nuestro p-vale es inferior a alpha por lo que confirmamos el descartar la hipotesis nula y nos quedamos con la alternativa.
 
 
 
