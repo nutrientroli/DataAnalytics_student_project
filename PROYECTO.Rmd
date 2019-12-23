@@ -966,7 +966,6 @@ library(ggplot2)
                                      "Average Session Time", 
                                      "Money spent" , 
                                      "Money spent per Session")
-
   
   # CLUSTERING ---------------------------------------------------------------------
   CalculateClusteringWIthKmeans = function (inputData,kValue, nStart) 
@@ -977,19 +976,17 @@ library(ggplot2)
   
   resultKTwo = CalculateClusteringWIthKmeans(usersAglomeratedData,2,50)
   resultKThree = CalculateClusteringWIthKmeans(usersAglomeratedData,3,50)
-  resultKFour = CalculateClusteringWIthKmeans(usersAglomeratedData,4,50)
   resultKTen = CalculateClusteringWIthKmeans(usersAglomeratedData,10,50)
   
-  resultKTwo$centers
-  resultKThree$centers
-  resultKFour$centers
-  resultKTen$centers
+  resultKTwo
   
- # FALTA HACER LOS PLOTS Y LOS COMENTARIOS 
+  
+  # FALTA HACER LOS PLOTS Y LOS COMENTARIOS 
+  
   
 ```
 
-
+Cuando vemos los resultados de "resultTwo" podemos ver que usando un valor de k de 2 se forman dos grupos muy discriminados por el valor de "Money Spent" y "Money spent por session". La diferencia a parte de esta es el sexo donde en el caso del grupo 1 nos encontramos con que es un grupo formado en su gran mayoria por hombres. En el segundo grupo encontramos una mayoria marginal de mugeres.
 
 
 # Conclusiones
