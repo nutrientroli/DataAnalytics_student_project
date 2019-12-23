@@ -758,7 +758,7 @@ Una vez se ha obtenido las métricas de ARPU (**`r toString(format(round(ARPU, 2
           )
 ```
 
-La información que se extrae de este boxplot es el rango de ingresos que proporcionan los usuarios durante toda su vida en el juego. Se observa que la gran mayoría realizan muy pocas aportaciones o ninguna, ya que la media está próxima al mínimo de ingresos.
+La información que se extrae de este boxplot es el rango de ingresos que proporcionan los usuarios durante toda su vida en el juego. Se observa que la gran mayoría realizan muy pocas aportaciones o ninguna, ya que el valor intermedio está muy próximo al mínimo de ingresos.
 
 
 ```{r, eval=TRUE, echo=TRUE}
