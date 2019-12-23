@@ -993,20 +993,90 @@ library(ggplot2)
   
   resultKTwo = CalculateClusteringWIthKmeans(usersAglomeratedData,2,50)
   resultKThree = CalculateClusteringWIthKmeans(usersAglomeratedData,3,50)
-  resultKTen = CalculateClusteringWIthKmeans(usersAglomeratedData,10,50)
-  
-  resultKTwo
-  
-  
-  # FALTA HACER LOS PLOTS Y LOS COMENTARIOS 
-  
+  resultSeven = CalculateClusteringWIthKmeans(usersAglomeratedData,7,50)
   
 ```
 
-Cuando vemos los resultados de "resultTwo" podemos ver que usando un valor de k de 2 se forman dos grupos muy discriminados por el valor de "Money Spent" y "Money spent por session". La diferencia a parte de esta es el sexo donde en el caso del grupo 1 nos encontramos con que es un grupo formado en su gran mayoria por hombres. En el segundo grupo encontramos una mayoria marginal de mugeres.
+**ADVERTENCIA:**
+El identificador numerico usado en las siguientes explicaciones de cada grupo puede variar dependiendo de la ejecucion de KMeans. 
+
+**K = 2**
+
+```{r, eval=TRUE, echo=TRUE}
+resultKTwo
+
+pie (table( resultKTwo$cluster),
+     main = "Agrupacion con k = 2")
+
+```
+
+Cuando vemos los resultados de "resultTwo" podemos ver que usando un valor de k de 2 se forman dos grupos muy discriminados por el valor de "Money Spent" y "Money spent por session". La diferencia a parte de esta es el sexo donde en el caso del grupo 1 nos encontramos con que es un grupo formado en su gran mayoria por hombres. En el segundo grupo encontramos una mayoria marginal de mugeres. 
+
+Tambien es importante darse cuenta de la diferencia de edad de ambos grupos. El primero, el mayoritariamente formado en su totalidad por hombres encontramos que la edad es menor que el grupo formado por una mezcla de ambos sexos.
+
+En cuanto a la cantidad de elementos en cada uno de los clusters encontramos que la mayoria de las instancias estan en el cluster 2 (cluster mixto) mientras que una minoria se encuentra en el cluster 1 (clauster unicamente de hombres). Estas asunciones sobre el sexo de cada grupo podemos hacerlas debido a que usamos el sexo como valor numerico siendo -1 Hombre y 1 Mujer. Si el valor tiende a uno de estos valores podemos llegar a sber que % de hombres y mujeres forman parte de ese cluster.
+
+**K = 3**
+
+```{r, eval=TRUE, echo=TRUE}
+resultKThree
+
+pie (table( resultKThree$cluster),
+     main = "Agrupacion con k = 3")
+```
+
+En el caso de utilizar k = 3 nos encontramos con que el output esta formado por 3 grupos (como es de esperar). 
+
+En cuanto a la edad y el sexo de los elementos del cluster encontramos una agrupacion similar a la del resultado de k = 3. Un grupo parece estar plenamente formado por hombres (grupo 1) mientras que el grupo 2 parece estar fomrado casi en su totalidad por mujeres con una edad rondando los 45 años. En este caso es el tercer grupo el cual esta formado de una amalgama de hombres y mujeeres.
+
+En cuanto al tiempo de juego encontramos que el claro ganador (en cuanto a cantidad) es el tercer grupo (grupo mixto) ya que tiene la mayor cantidad de horas. Ademas este grupo gasta poco en total y poco por sesion. Tambien es el grupo que menos juega. El segundo grupo juega algo mas aunque sus sesiones son mas cortas que las del grupo 3 y 1. Este grupo ademas gasta menos que el grupo 1 y 3 siendo entonces el qu emenos gasta por sesion y en total. Es el grupo 1, el grupo formado exclusivamente por hombres, el que mas ha gastado por sesion y en total. Esto es curioso ya que puede contradecir el estudio inicial.
+
+En este caso el grupo con mayor cantidad de instancias es el 3 (grupo mixto en cuanto a sexo y el que menos sesiones ha tenido --> mas casual). Se ve seguido de cerca del grupo 2 siendo el grupo 1 el utlimo en cuanto a instancias (una cuarta parte de la muestra)
+
+**K = 7**
+
+```{r, eval=TRUE, echo=TRUE}
+resultSeven
+
+pie (table( resultSeven$cluster),
+     main = "Agrupacion con k = 7")
+```
+
+En el momento que decidimos optar por la formacion de mas clusters añadimos error. Este error es observable en que los clusters que son formados comparten algunos entre ellos atribuos con valores muy similares (vease cluster 1 y cluster 2). Dando una vista rapida se puede observar una presencia importante (50% de los clusters) de hombres que componen clusters enteros (clusters 3, 5 , 6 y 7). A parte de esto nos encontramos con que el cluster 1 y 2 sumados suman un total superior al 50% de la muestra. Esto nos puede indicar junto con el hecho de tener clusters muy similares entre ellos que los resultados pueden ser de no gran utiliad.
+
+Dentro del caos aparente de esta prueba podemos observar la presencia de dos grupos (cluster 3 y 6) donde aparecen grandes cantidades de dinero gastado. Lo curioso es que en estos grupos son todo hombres relativamente jovenes (teniendo en cuenta el segmento de la muestra).
+
+**CONCLUSION CLUSTERING**
+
+Tras llevar a cabo varios ejercicios de clustering podemos observar una tendencia bastante pronunciada a la discriminacion de clusters mediante el sexo y sobre el dinero gastado en total y po rsesion. Esto nos indica que existe una disparidad importante en estos atributos (al menos es lo que se interpreta de los clusters que han surgido como resultado) y que son valores clave en la separacion en grupos.
+
+```{r, eval=TRUE, echo=TRUE}
+
+  resultKTwo$centers
+
+  resultKThree$centers
+  
+  resultSeven$centers
+
+```
+
+Si planteamos cada cluster como el individuo "perfecto" de cada agrupacion cuando trabajamos con **2 como valor de k** encontramos que:
+  - Los hombres **gastan mas** que las mujeres , **juegan mas** pero tienen **sesiones mas cortas**.
+  - Los hombres son por lo general **mas jovenes** que las mujeres que juegan a este juego.
+  
+Si nos fijamos en la agrupacion con **k=3**
+  - Los hombres **gastan mas** que las mujeres , **juegan mas** pero tienen **sesiones mas cortas**.
+  - Existe un grupo que supera el 30% de tamaño que **no gasta casi dinero** formado por un mix tanto de hombres como de mujeres donde existe una mayor cantidad de mujeres.
+  
+Si nos fijamos en la agrupacion con **K = 7**
+  - Los hombres **gastan mas** que las mujeres , **juegan mas** pero tienen **sesiones mas cortas**.
+  - Existe una separacion importante entre **quien gasta mas y quien menos**
+  - Por lo general las **mujeres juegan mas**  de forma **mas esporadica**
+  
 
 
 # Conclusiones
+
 
 
 
