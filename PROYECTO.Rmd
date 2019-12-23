@@ -646,6 +646,7 @@ En el juego del estudio, los usuario tienen un tiempo de vida de media de **`r t
   group_days = summarise(group_by(usersDateSessionsMoneySpent,Date),Revenue=sum(Money))
 
   plot(group_days,
+       main = "Ingresos por dia"
      xlab = "Días",
      ylab = "Ingresos",
      xlim = c(0,120),
@@ -671,6 +672,7 @@ De la información que proporcionan los dos gráficos, se puede observar cómo h
   group_months =summarise(group_by(usersDateSessionsMoneySpent,DateMonth), Revenue=sum(Money))
   
   plot(group_months,
+       main = "ingresos por Mes"
      xlab = "Meses",
      ylab = "Ingresos",
      ylim = c(min(group_months$Revenue),max(group_months$Revenue)),
@@ -778,9 +780,6 @@ La información que se extrae de este boxplot es el rango de ingresos que propor
 ```
 
 De media, la métrica del LTV de este juego es de: **`r toString(format(round(LTV, 2), nsmall = 2))`** unidades monetarias.
-
-
-
 
 
 # Test A/B
@@ -929,7 +928,6 @@ q2 <- qnorm(0.05, lower.tail = FALSE)
 s2 <- sqrt((((22207 * 8281) + (22065 * 3600)) / 44270)) 
 
 zobs2 <- ((93.713) / (s2 * (sqrt(1/n1.1 + 1/n2.2))))
-
 
 
 ```
